@@ -2,12 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixos-hardware, home-manager, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+#      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ./hardware-configuration.nix
     ];
 
