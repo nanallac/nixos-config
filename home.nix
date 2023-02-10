@@ -5,17 +5,27 @@
   home.homeDirectory = "/home/josh";
 
   home.packages = with pkgs; [
-    firefox
     neovim
     htop
+    bitwarden-cli
   ];
+
+  programs.firefox = {
+    enable = true;
+  };
 
   programs.git = {
     enable = true;
     userName = "Josh Callanan";
     userEmail = "joshua.callanan@pm.me";
+    extraConfig = {
+      init.defaultBranch = "main";
+      url = {
+        "https://github.com/".insteadOf = [ "gh:" "github:" ];
+      };
+    };
   };
 
-  home.stateVersion = "22.11";
   programs.home-manager.enable = true;
+  home.stateVersion = "22.11";
 }
