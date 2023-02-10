@@ -89,31 +89,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
-  home-manager.enable = true;
 
-  home-manager.users.josh = {
-    home.username = "Josh";
-    home.homeDirectory = "/home/josh";
-    home.stateVersion = "22.11";
-    home.packages = with pkgs; [
-      firefox
-      neovim
-    ];
-
-    programs.git = {
-      enable = true;
-      package = pkgs.gitFull;
-      lfs.enable = true;
-      userName = "Josh Callanan";
-      userEmail = "joshua.callanan@pm.me";
-      extraConfig = {
-        init.defaultBranch = "main";
-	url = {
-	  "https://github.com".insteadOf = [ "gh:" "github:" ];
-	};
-      };
-    };
-  };
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
