@@ -4,12 +4,39 @@
   home.username = "josh";
   home.homeDirectory = "/home/josh";
 
+  fonts.fontconfig.enable = true;
+
   home.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
     neovim
     htop
     bitwarden-cli
   ];
 
+  programs.zsh = {
+    enable = true;
+    autocd = true;
+    dotDir = ".config/zsh";
+    enableAutosuggestions = true;
+    enableCompletion = true;
+    enableSyntaxHighlighting = true;
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      hostname = {
+        ssh_only = false;
+	trim_at = "";
+      };
+    };
+  };
+  
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
   programs.firefox = {
     enable = true;
   };
