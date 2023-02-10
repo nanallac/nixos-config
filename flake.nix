@@ -12,7 +12,7 @@
 
   outputs = inputs@{ nixpkgs, nixos-hardware, home-manager, ... }: {
     nixosConfigurations = {
-      koala.hostname = nixpkgs.lib.nixosSystem {
+      koala = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
