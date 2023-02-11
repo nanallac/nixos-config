@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    gnomeExtensions.pop-shell
     neovim
     tree
     htop
@@ -51,6 +52,22 @@
       url = {
         "https://github.com/".insteadOf = [ "gh:" "github:" ];
       };
+    };
+  };
+
+  dconf.settings = {
+    "org/gnome/shell" = {
+      disable-user-extension = false;
+
+      disabled-extentions = [
+        "apps-menu@gnome-shell-extensions.gcampax.github.com"
+      ];
+
+      enabled-extensions = [
+        "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
+	"pop-shell@system76.com"
+	"user-theme@gnome-shell-extensions.gcampax.github.com"
+      ];
     };
   };
 
