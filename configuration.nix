@@ -1,12 +1,8 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
 #      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ./hardware-configuration.nix
     ];
@@ -53,6 +49,40 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-photos
+    gnome-tour
+    gnome-usage
+    gnome-text-editor
+    gnome-connections
+    baobab
+    evince
+  ]) ++ (with pkgs.gnome; [
+    cheese
+    gnome-music
+    epiphany
+    geary
+    gnome-characters
+    yelp
+    gnome-contacts
+    gnome-font-viewer
+    gnome-initial-setup
+    totem
+    gnome-weather
+    gnome-maps
+    gnome-system-monitor
+    simple-scan
+    gnome-logs
+    eog
+    gnome-disk-utility
+  ]);
+
+  programs.dconf.enable = true;
+  
+  environment.systemPackages = with pkgs; [
+    gnome.gnome-tweaks
+  ];
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -92,8 +122,6 @@
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
-
-
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "josh";
@@ -104,10 +132,6 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  environment.systemPackages = with pkgs; [
-    tree
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

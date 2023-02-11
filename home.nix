@@ -9,6 +9,7 @@
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     neovim
+    tree
     htop
     bitwarden-cli
   ];
