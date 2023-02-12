@@ -9,7 +9,6 @@
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     gnomeExtensions.pop-shell
-    helix
     tree
     htop
     bitwarden-cli
@@ -32,6 +31,13 @@
         ssh_only = false;
 	trim_at = "";
       };
+    };
+  };
+
+  programs.helix = {
+    enable = true;
+    settings = {
+      theme = "bogster";
     };
   };
   
