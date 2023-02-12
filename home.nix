@@ -9,6 +9,7 @@
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     gnomeExtensions.pop-shell
+    evince
     tree
     htop
     bitwarden-cli
