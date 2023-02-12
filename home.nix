@@ -29,7 +29,7 @@
     settings = {
       hostname = {
         ssh_only = false;
-	trim_at = "";
+        trim_at = "";
       };
     };
   };
