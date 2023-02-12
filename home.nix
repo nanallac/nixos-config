@@ -66,8 +66,8 @@
 
       enabled-extensions = [
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
-	"pop-shell@system76.com"
-	"user-theme@gnome-shell-extensions.gcampax.github.com"
+        "pop-shell@system76.com"
+        "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
     };
   };
