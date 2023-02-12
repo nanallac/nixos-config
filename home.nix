@@ -9,7 +9,7 @@
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     gnomeExtensions.pop-shell
-    neovim
+    helix
     tree
     htop
     bitwarden-cli
@@ -39,6 +39,7 @@
     enable = true;
     enableZshIntegration = true;
   };
+
   programs.firefox = {
     enable = true;
   };
