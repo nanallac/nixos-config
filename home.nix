@@ -13,6 +13,7 @@
     tree
     htop
     bitwarden-cli
+    superslicer
   ];
 
   programs.zsh = {
