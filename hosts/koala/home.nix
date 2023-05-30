@@ -21,6 +21,7 @@
     endeavour
     kanidm
     freecad
+    calibre
   ];
 
   programs.zsh = {
