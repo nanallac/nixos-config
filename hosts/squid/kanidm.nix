@@ -17,8 +17,8 @@ in
       trust_x_forward_for = true;
       # tls_key = "${config.security.acme.certs."nanall.ac".directory}/key.pem";
       # tls_chain = "${config.security.acme.certs."nanall.ac".directory}/fullchain.pem";
-      tls_key = "/var/lib/kanidm/key.pem";
-      tls_chain = "/var/lib/kanidm/fullchain.pem";
+      tls_key = "/var/lib/kanidm/certs/key.pem";
+      tls_chain = "/var/lib/kanidm/certs/fullchain.pem";
     };
     clientSettings.uri = "https://${url}";
   };
