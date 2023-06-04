@@ -8,7 +8,6 @@
     ./hardware-configuration.nix
     ./nextcloud.nix
     ./backup.nix
-    ../common/users/josh
     ../common/services
   ];
 
