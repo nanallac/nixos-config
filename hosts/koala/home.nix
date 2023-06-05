@@ -34,6 +34,9 @@
     enableAutosuggestions = true;
     enableCompletion = true;
     enableSyntaxHighlighting = true;
+    initExtra = ''
+      eval "$(direnv hook zsh)"
+    '';
   };
 
   programs.starship = {
