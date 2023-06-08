@@ -49,12 +49,12 @@
         ];
       };
 
-      "rhino" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/rhino/configuration.nix
-        ];
-      };
+      # "rhino" = nixpkgs.lib.nixosSystem {
+      #   system = "x86_64-linux";
+      #   modules = [
+      #     ./hosts/rhino/configuration.nix
+      #   ];
+      # };
     };
 
     deploy = {
@@ -78,12 +78,12 @@
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."panda";
           };
         };
-        "rhino" = {
-          hostname = "192.168.1.226";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
-          };
-        };
+        # "rhino" = {
+        #   hostname = "192.168.1.226";
+        #   profiles.system = {
+        #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
+        #   };
+        # };
       };
     };
   };
