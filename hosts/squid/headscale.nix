@@ -14,7 +14,7 @@ in
       dns_config = {
         override_local_dns = true;
         base_domain = "${domain}";
-        magic_dns = true;
+        # magic_dns = true;
         nameservers = [
           "9.9.9.9"
         ];

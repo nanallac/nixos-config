@@ -19,9 +19,9 @@
     certs."nanall.ac" = {
       domain = "nanall.ac";
       extraDomainNames = [ "*.nanall.ac" ];
-      dnsProvider = "linode";
+      dnsProvider = "bunny";
       dnsPropagationCheck = true;
-      credentialsFile = "/root/linode.ini";
+      credentialsFile = "/root/bunny";
     };
   };
 
