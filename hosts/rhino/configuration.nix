@@ -22,35 +22,8 @@
     };
   };
 
-  # services = {
-  #   gitea = {
-  #     enable = true;
-  #     appName = "Josh's Gitea server.";
-  #     domain = "git..nanall.ac";
-  #     rootUrl = "https://git.nanall.ac";
-  #   };
-
-  #   nginx = {
-  #     enable = true;
-  #     virtualHosts = {
-  #       "git.nanall.ac" = {
-  #         forceSSL = true;
-  #         useACMEHost = "nanall.ac";
-  #         locations = {
-  #           "/" = {
-  #             proxyPass = "http://localhost";
-  #           };
-  #         };
-  #       };
-  #     };
-  #   };
-  # };
-
-  # users.users.nginx.extraGroups = [ "acme" ];
-
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
