@@ -17,9 +17,14 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nanallac-nur = {
+      url = "github:nanallac/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, stylix, deploy-rs, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-hardware, home-manager, stylix, deploy-rs, nanallac-nur, ... }@inputs: {
     nixosConfigurations = {
       "koala" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -49,12 +54,20 @@
         ];
       };
 
-      # "rhino" = nixpkgs.lib.nixosSystem {
-      #   system = "x86_64-linux";
-      #   modules = [
-      #     ./hosts/rhino/configuration.nix
-      #   ];
-      # };
+      "rhino" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ({
+            nixpkgs.overlays = [
+              (final: prev: {
+                nanallac-nur = inputs.nanallac-nur.packages."${prev.system}";
+              })
+            ];
+          })
+        
+          ./hosts/rhino/configuration.nix
+        ];
+      };
     };
 
     deploy = {
@@ -78,12 +91,12 @@
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."panda";
           };
         };
-        # "rhino" = {
-        #   hostname = "192.168.1.226";
-        #   profiles.system = {
-        #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
-        #   };
-        # };
+        "rhino" = {
+          hostname = "192.168.1.109";
+          profiles.system = {
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
+          };
+        };
       };
     };
   };
