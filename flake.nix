@@ -29,12 +29,12 @@
       "koala" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/koala/configuration.nix
+          ./nixos/hosts/koala/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.josh = import ./hosts/koala/home.nix;
+            home-manager.users.josh = import ./nixos/hosts/koala/home.nix;
           }
           # stylix.nixosModules.stylix
         ];
@@ -43,14 +43,14 @@
       "squid" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/squid/configuration.nix
+          ./nixos/hosts/squid/configuration.nix
         ];
       };
       
       "panda" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/panda/configuration.nix
+          ./nixos/hosts/panda/configuration.nix
         ];
       };
 
@@ -65,7 +65,7 @@
             ];
           })
         
-          ./hosts/rhino/configuration.nix
+          ./nixos/hosts/rhino/configuration.nix
         ];
       };
     };

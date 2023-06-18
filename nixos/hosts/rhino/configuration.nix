@@ -7,7 +7,7 @@
   imports = [
     ./hardware-configuration.nix
     ./frigate.nix
-    ../common/services
+    ../../modules/services
   ];
 
   environment.systemPackages = [

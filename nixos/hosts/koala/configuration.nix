@@ -5,7 +5,7 @@
     [ 
 #      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ./hardware-configuration.nix
-      ../common/services
+      ../../modules/services
       # ./stylix.nix
     ];
 
