@@ -9,6 +9,8 @@
     ./backup.nix
   ];
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   security.acme = {
     acceptTerms = true;
     defaults.email = "josh@callanan.contact";
