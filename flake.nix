@@ -47,6 +47,13 @@
         ];
       };
       
+      "chimp" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./nixos/hosts/chimp/configuration.nix
+        ];
+      };
+      
       "panda" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -83,6 +90,12 @@
           hostname = "175.45.180.229";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."squid";
+          };
+        };
+        "chimp" = {
+          hostname = "192.168.1.117";
+          profiles.system = {
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."chimp";
           };
         };
         "panda" = {

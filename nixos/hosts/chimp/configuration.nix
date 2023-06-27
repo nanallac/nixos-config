@@ -6,10 +6,7 @@
 
   imports = [
     ./hardware-configuration.nix
-    ../common/users/josh
-    ../common/services
-    ./kanidm.nix
-    ./backup.nix
+    ../../modules/services
   ];
 
   security.acme = {
@@ -18,36 +15,22 @@
 
     certs."nanall.ac" = {
       domain = "nanall.ac";
-      extraDomainNames = [ "*.nanall.ac" ];
-      dnsProvider = "bunny";
-      dnsPropagationCheck = true;
-      credentialsFile = "/root/bunny";
+      # extraDomainNames = [ "*.nanall.ac" ];
+      dnsProvider = "porkbun";
+      # dnsPropagationCheck = true;
+      credentialsFile = "/root/porkbun";
     };
   };
 
-  # services.nginx = {
-  #   enable = true;
-  #   virtualHosts = {
-  #     "idm.nanall.ac" = {
-  #       forceSSL = true;
-  #       useACMEHost = "nanall.ac";
-  #       locations."/".proxyPass = "http://localhost:8443";
-  #     };
-  #   };
-  # };
-
-  # users.users.nginx.extraGroups = [ "acme" ];
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
   networking = {
     hostName = "chimp";
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8443 ];
     };
   };
 
@@ -58,5 +41,5 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
   ];
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 }
