@@ -15,9 +15,8 @@
 
     certs."nanall.ac" = {
       domain = "nanall.ac";
-      # extraDomainNames = [ "*.nanall.ac" ];
+      extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
-      # dnsPropagationCheck = true;
       credentialsFile = "/root/porkbun";
     };
   };

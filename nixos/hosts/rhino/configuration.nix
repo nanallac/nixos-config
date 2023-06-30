@@ -20,10 +20,8 @@
 
   #   certs."nanall.ac" = {
   #     domain = "nanall.ac";
-  #     extraDomainNames = [ "*.nanall.ac" ];
-  #     dnsProvider = "linode";
-  #     dnsPropagationCheck = true;
-  #     credentialsFile = "/root/linode.ini";
+  #     dnsProvider = "porkbun";
+  #     credentialsFile = "/root/porkbun";
   #   };
   # };
 
