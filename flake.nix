@@ -22,7 +22,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, stylix, deploy-rs, nanallac-nur, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-hardware, home-manager, deploy-rs, nanallac-nur, ... }@inputs: {
     nixosConfigurations = {
       "koala" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
