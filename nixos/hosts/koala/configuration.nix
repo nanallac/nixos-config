@@ -80,7 +80,7 @@
     simple-scan
     gnome-logs
     eog
-    gnome-disk-utility
+    # gnome-disk-utility
   ]);
 
   programs.dconf.enable = true;

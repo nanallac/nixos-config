@@ -91,7 +91,7 @@
           };
         };
         "chimp" = {
-          hostname = "192.168.1.117";
+          hostname = "192.168.1.226";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."chimp";
           };

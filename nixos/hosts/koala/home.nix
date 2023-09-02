@@ -22,10 +22,20 @@
     kanidm
     freecad
     calibre
+    racket
+    inkscape
   ];
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs-gtk;
+    extraConfig = ''
+      (setq standard-indent 2)
+    '';
+  };
 
   programs.zsh = {
     enable = true;
