@@ -1,4 +1,4 @@
-{ config, pkgs, options, ... }:
+{ lib, config, pkgs, options, ... }:
 
 {
   services.nextcloud = {
@@ -29,10 +29,6 @@
       adminuser = "admin";
 
       defaultPhoneRegion = "AU";
-    };
-
-    phpOptions =  options.services.nextcloud.phpOptions.default // {
-      memory_limit = "2048M";
     };
 
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis ];

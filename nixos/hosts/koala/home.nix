@@ -24,6 +24,7 @@
     calibre
     racket
     inkscape
+    jdk20
   ];
 
   programs.direnv.enable = true;
@@ -35,6 +36,12 @@
     extraConfig = ''
       (setq standard-indent 2)
     '';
+  };
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscodium;
+    extensions = [ pkgs.vscode-extensions.betterthantomorrow.calva ];
   };
 
   programs.zsh = {
