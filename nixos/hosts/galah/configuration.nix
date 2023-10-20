@@ -14,6 +14,7 @@
 
   networking.hostName = "galah";
   networking.networkmanager.enable = true;
+  networking.hostId = "fd82eaf9";
 
   time.timeZone = "Australia/Perth";
 

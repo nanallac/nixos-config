@@ -1,27 +1,26 @@
 {
   disko.devices = {
     disk = {
-      nvme0n1 = {
+      nvme0 = {
         type = "disk";
-	device = "/dev/nvme0n1";
-	content = {
-	  type = "gpt";
-	  partitions = {
-	    BOOT = {
-	      size = "1M";
-	      type = "EF02";
-	    };
-	    ESP = {
-	      size = "500M";
-	      type = "EF00";
-	      content = {
-	        type = "filesystem";
-		format = "vfat";
-	      };
-	    };
+				device = "/dev/nvme0n1";
+				content = {
+					type = "gpt";
+					partitions = {
+						BOOT = {
+							size = "1M";
+							type = "EF02";
+						};
+						ESP = {
+							size = "500M";
+							type = "EF00";
+							content = {
+								type = "filesystem";
+								format = "vfat";
+							};
+						};
 	    bpool = {
 	      size = "4G";
-	      type = "BE00";
 	      content = {
 	        type = "zfs";
 		pool = "bpool";
@@ -29,7 +28,6 @@
 	    };
 	    rpool = {
 	      size = "100%";
-	      type = "BF00";
 	      content = {
 	        type = "zfs";
 		pool = "rpool";
@@ -46,9 +44,9 @@
 	  };
 	};
       };
-      nvme1n1 = {
+      nvme1 = {
         type = "disk";
-	device = "/dev/nvme0n1";
+	device = "/dev/nvme1n1";
 	content = {
 	  type = "gpt";
 	  partitions = {
@@ -66,7 +64,6 @@
 	    };
 	    bpool = {
 	      size = "4G";
-	      type = "BE00";
 	      content = {
 	        type = "zfs";
 		pool = "bpool";
@@ -74,7 +71,6 @@
 	    };
 	    rpool = {
 	      size = "100%";
-	      type = "BF00";
 	      content = {
 	        type = "zfs";
 		pool = "rpool";
@@ -98,7 +94,7 @@
 	mode = "mirror";
 	options = {
 	  compatibility = "grub2";
-	  ashift = 12;
+	  ashift = "12";
 	  autotrim = "on";
 	};
 	rootFsOptions = {
@@ -111,7 +107,6 @@
 	  mountpoint = "none";
 	  checkum = "sha256";
 	};
-	mountpoint = "/boot";
 	datasets = {
 	  "bpool/local/boot" = {
 	    type = "zfs_fs";
@@ -123,7 +118,7 @@
         type = "zpool";
 	mode = "mirror";
 	options = {
-	  ashift = 12;
+	  ashift = "12";
 	  autotrim = "on";
 	};
 	rootFsOptions = {
@@ -136,10 +131,10 @@
 	  mountpoint = "none";
 	  checksum = "edonr";
 	};
-	mountpoint = "/";
 	postCreateHook = ''
 	  zfs snapshot rpool/local/usr@SYSINIT
-	  zfs snapshot rpool/local/var@SYSINIT'';
+	  zfs snapshot rpool/local/var@SYSINIT
+		'';
 	datasets = {
 	  "rpool/local" = {
 	    type = "zfs_fs";
