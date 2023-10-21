@@ -25,6 +25,9 @@
     racket
     inkscape
     jdk20
+    clojure
+    clojure-lsp
+    leiningen
   ];
 
   programs.direnv.enable = true;
@@ -32,10 +35,7 @@
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-gtk;
-    extraConfig = ''
-      (setq standard-indent 2)
-    '';
+    package = pkgs.emacs29-gtk3;
   };
 
   programs.vscode = {
