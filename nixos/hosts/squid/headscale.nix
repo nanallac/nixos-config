@@ -25,11 +25,11 @@ in
       ip_prefixes = [
         "100.64.0.0/10"
       ];
-    };
-    openIdConnect = {
+    oidc = {
       issuer = "https://idm.nanall.ac/oauth2/openid/headscale";
-      clientId = "headscale";
-      clientSecretFile = "/etc/headscale-client-secret";
+      client_id = "headscale";
+      client_secret_path = "/etc/headscale-client-secret";
+    };
     };
   };
   environment.systemPackages = [ config.services.headscale.package ];

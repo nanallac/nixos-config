@@ -22,7 +22,6 @@
     kanidm
     freecad
     calibre
-    racket
     inkscape
     jdk20
     clojure
@@ -38,19 +37,13 @@
     package = pkgs.emacs29-gtk3;
   };
 
-  programs.vscode = {
-    enable = true;
-    package = pkgs.vscodium;
-    extensions = [ pkgs.vscode-extensions.betterthantomorrow.calva ];
-  };
-
   programs.zsh = {
     enable = true;
     autocd = true;
     dotDir = ".config/zsh";
     enableAutosuggestions = true;
     enableCompletion = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
     initExtra = ''
       eval "$(direnv hook zsh)"
     '';
