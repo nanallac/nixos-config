@@ -19,7 +19,7 @@ in
           "9.9.9.9"
         ];
         restricted_nameservers = {
-          "${domain}" = [ "192.168.1.10" ];
+          "${domain}" = [ "192.168.1.1" ];
         };
       };
       ip_prefixes = [
