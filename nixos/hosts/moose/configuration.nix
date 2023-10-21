@@ -12,7 +12,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "galah";
+  networking.hostName = "moose";
   networking.networkmanager.enable = true;
   networking.hostId = "fd82eaf9";
 
