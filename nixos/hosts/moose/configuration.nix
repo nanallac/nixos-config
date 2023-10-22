@@ -18,14 +18,18 @@
   networking.networkmanager.enable = true;
   networking.hostId = "fd82eaf9";
 
-  # Keep the following (https://grahamc.com/blog/erase-your-darlings/)
+  # Keep the following directories (https://grahamc.com/blog/erase-your-darlings/)
   systemd.tmpfiles.rules = [
     # SSH
     "d /keep/ssh 0755 root root -"
-    "d /keep/var/lib/fail2ban 0750 root root -"
 
     # fail2ban
+    "d /keep/var/lib/fail2ban 0750 root root -"
     "L /var/lib/fail2ban - - - - /keep/var/lib/fail2ban"
+
+    # ACME certificates
+    "d /keep/var/lib/acme 0750 root root -"
+    "L /var/lib/acme - - - - /keep/var/lib/acme"
   ];
 
   # Enable the OpenSSH daemon and keep keys.  
@@ -42,6 +46,19 @@
         bits = 4096;
       }
     ];
+  };
+
+  # ACME certificates
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "josh@callanan.contact";
+
+    certs."nanall.ac" = {
+      domain = "nanall.ac";
+      extraDomainNames = [ "*.nanall.ac" ];
+      dnsProvider = "porkbun";
+      credentialsFile = "/var/lib/acme/porkbun";
+    };
   };
   
   # Add my SSH key to allow access 
