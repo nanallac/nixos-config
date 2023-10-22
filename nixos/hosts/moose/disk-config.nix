@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   disko.devices = {
     disk = {
@@ -7,159 +9,87 @@
 				content = {
 					type = "gpt";
 					partitions = {
-						BOOT = {
-							size = "1M";
-							type = "EF02";
-						};
 						ESP = {
-							size = "500M";
+							size = "64M";
 							type = "EF00";
 							content = {
 								type = "filesystem";
 								format = "vfat";
+								mountpoint = "/boot";
 							};
 						};
-	    bpool = {
-	      size = "4G";
-	      content = {
-	        type = "zfs";
-		pool = "bpool";
-	      };
-	    };
-	    rpool = {
-	      size = "100%";
-	      content = {
-	        type = "zfs";
-		pool = "rpool";
-	      };
-	    };
-	    swap = {
-	      size = "2G";
-	      content = {
-	        type = "swap";
-		randomEncryption = true;
-		resumeDevice = false;
-	      };
-	    };
-	  };
-	};
-      };
-      nvme1 = {
-        type = "disk";
-	device = "/dev/nvme1n1";
-	content = {
-	  type = "gpt";
-	  partitions = {
-	    BOOT = {
-	      size = "1M";
-	      type = "EF02";
-	    };
-	    ESP = {
-	      size = "500M";
-	      type = "EF00";
-	      content = {
-	        type = "filesystem";
-		format = "vfat";
-	      };
-	    };
-	    bpool = {
-	      size = "4G";
-	      content = {
-	        type = "zfs";
-		pool = "bpool";
-	      };
-	    };
-	    rpool = {
-	      size = "100%";
-	      content = {
-	        type = "zfs";
-		pool = "rpool";
-	      };
-	    };
-	    swap = {
-	      size = "2G";
-	      content = {
-	        type = "swap";
-		randomEncryption = true;
-		resumeDevice = false;
-	      };
-	    };
-	  };
-	};
+				    rpool = {
+				      size = "100%";
+				      content = {
+				        type = "zfs";
+								pool = "rpool";
+				      };
+				    };
+				  };
+				};
+			};
+	    nvme1 = {
+	      type = "disk";
+				device = "/dev/nvme1n1";
+				content = {
+					type = "gpt";
+					partitions = {
+						rpool = {
+							size = "100%";
+							content = {
+								type = "zfs";
+								pool = "rpool";
+		      		};
+		    		};
+		  		};
+				};
       };
     };
     zpool = {
-      bpool = {
-        type = "zpool";
-	mode = "mirror";
-	options = {
-	  compatibility = "grub2";
-	  ashift = "12";
-	  autotrim = "on";
-	};
-	rootFsOptions = {
-	  compression = "lz4";
-	  acltype = "posixacl";
-	  devices = "off";
-	  normalization = "formD";
-	  relatime = "on";
-	  xattr = "sa";
-	  mountpoint = "none";
-	  checkum = "sha256";
-	};
-	datasets = {
-	  "bpool/local/boot" = {
-	    type = "zfs_fs";
-	    mountpoint = "/boot";
-	  };
-	};
-      };
       rpool = {
         type = "zpool";
-	mode = "mirror";
-	options = {
-	  ashift = "12";
-	  autotrim = "on";
-	};
-	rootFsOptions = {
-	  acltype = "posixacl";
-	  compression = "zstd";
-	  dnodesize = "auto";
-	  normalization = "formD";
-	  relatime = "on";
-	  xattr = "sa";
-	  mountpoint = "none";
-	  checksum = "edonr";
-	};
-	postCreateHook = ''
-	  zfs snapshot rpool/local/usr@SYSINIT
-	  zfs snapshot rpool/local/var@SYSINIT
-		'';
-	datasets = {
-	  "rpool/local" = {
-	    type = "zfs_fs";
-	    mountpoint = "/";
-	  };
-	  "rpool/safe/home" = {
-	    type = "zfs_fs";
-	  };
-	  "rpool/local/nix" = {
-	    type = "zfs_fs";
-	    options = {
-	      atime = "off";
-	    };
-	  };
-	  "rpool/local/usr" = {
-            type = "zfs_fs";
-          };
-	  "rpool/local/var" = {
-	    type = "zfs_fs";
-	  };
-	  "rpool/safe/keep" = {
-	    type = "zfs_fs";
-	  };
-	};
+				mode = "mirror";
+				options = {
+	  			ashift = "12";
+	  			autotrim = "on";
+				};
+				rootFsOptions = {
+				  acltype = "posixacl";
+				  compression = "zstd";
+				  dnodesize = "auto";
+				  normalization = "formD";
+				  relatime = "on";
+				  xattr = "sa";
+				  mountpoint = "none";
+				  checksum = "edonr";
+				};
+				postCreateHook = "zfs snapshot rpool/local/root@blank";
+				datasets = {
+				  "local/root" = {
+				    type = "zfs_fs";
+				    mountpoint = "/";
+				  };
+				  "local/nix" = {
+				    type = "zfs_fs";
+						mountpoint = "/nix";
+				    options = {
+				      atime = "off";
+				    };
+				  };
+				  "safe/home" = {
+				    type = "zfs_fs";
+						mountpoint = "/home";
+				  };
+				  "safe/keep" = {
+				    type = "zfs_fs";
+						mountpoint = "/keep";
+				  };
+				};
       };
     };
   };
+
+	boot.initrd.postDeviceCommands = lib.mkAfter ''
+		zfs rollback -r rpool/local/root@blank
+	'';
 }

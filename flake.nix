@@ -50,12 +50,12 @@
         ];
       };
       
-      "galah" = nixpkgs.lib.nixosSystem {
+      "moose" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
-          ./nixos/hosts/galah/disk-config.nix
-          ./nixos/hosts/galah/configuration.nix
+          ./nixos/hosts/moose/disk-config.nix
+          ./nixos/hosts/moose/configuration.nix
         ];
       };
       
