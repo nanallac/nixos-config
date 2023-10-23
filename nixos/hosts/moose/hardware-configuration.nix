@@ -4,6 +4,8 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
+  # Motherboard MW-NAS-N5105
+
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
