@@ -11,6 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,7 +27,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, deploy-rs, nanallac-nur, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-hardware, home-manager, disko, deploy-rs, nanallac-nur, ... }@inputs: {
     nixosConfigurations = {
       "koala" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -42,6 +47,15 @@
         system = "x86_64-linux";
         modules = [
           ./nixos/hosts/squid/configuration.nix
+        ];
+      };
+      
+      "moose" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          ./nixos/hosts/moose/disk-config.nix
+          ./nixos/hosts/moose/configuration.nix
         ];
       };
       
