@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../common
+      #./kanidm.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -16,7 +17,8 @@
   networking.networkmanager.enable = true;
   networking.hostId = "fd82eaf9";
 
-  # Keep the following directories (https://grahamc.com/blog/erase-your-darlings/)
+  # Keep the following directories
+  # (https://grahamc.com/blog/erase-your-darlings/)
   systemd.tmpfiles.rules = [
     # SSH
     "d /keep/ssh 0755 root root -"
