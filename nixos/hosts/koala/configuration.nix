@@ -25,9 +25,6 @@
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  # Set your time zone.
-  time.timeZone = "Australia/Perth";
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_AU.UTF-8";
 

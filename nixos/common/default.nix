@@ -5,6 +5,8 @@
     ./services
   ];
 
+  boot.tmp.cleanOnBoot = true;
+
   networking.domain = "nanall.ac";
 
   nix = {
