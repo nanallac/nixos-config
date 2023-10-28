@@ -3,6 +3,7 @@
 {
   imports = [
     ./services
+    ./users
   ];
 
   boot.tmp.cleanOnBoot = true;

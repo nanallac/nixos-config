@@ -90,10 +90,10 @@
     };
 
     deploy = {
-      sshUser = "root";
-      user = "root";
+      sshUser = "deploy";
       sshOpts = [ "-p" "22" ];
-
+      user = "root";
+      
       autoRollback = false;
       magicRollback = false;
 
@@ -102,12 +102,6 @@
           hostname = "175.45.180.229";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."squid";
-          };
-        };
-        "chimp" = {
-          hostname = "192.168.1.226";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."chimp";
           };
         };
         "panda" = {
