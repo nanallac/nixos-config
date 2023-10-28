@@ -122,6 +122,12 @@
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
           };
         };
+        "moose" = {
+          hostname = "192.168.1.40";
+          profiles.system = {
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
+          };
+        };
       };
     };
   };
