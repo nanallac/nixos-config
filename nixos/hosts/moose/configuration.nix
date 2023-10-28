@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -33,7 +31,7 @@
     "L /var/lib/acme - - - - /keep/var/lib/acme"
   ];
 
-  # Enable the OpenSSH daemon and keep keys.  
+  # Enable the OpenSSH daemon and keep keys.
   services.openssh = {
     enable = true;
     hostKeys = [
@@ -61,12 +59,11 @@
       credentialsFile = "/var/lib/acme/porkbun";
     };
   };
-  
-  # Add my SSH key to allow access 
+
+  # Add my SSH key to allow access
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
   ];
 
   system.stateVersion = "23.05";
 }
-
