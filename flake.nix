@@ -34,6 +34,7 @@
         modules = [
           ./nixos/hosts/koala/configuration.nix
           home-manager.nixosModules.home-manager
+          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
           # stylix.nixosModules.stylix
         ];
       };
