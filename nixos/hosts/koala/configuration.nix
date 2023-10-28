@@ -2,14 +2,12 @@
 
 {
   imports =
-    [ 
+    [
 #      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       ./hardware-configuration.nix
       ../../modules/services
       # ./stylix.nix
     ];
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -49,7 +47,7 @@
   services.xserver = {
     enable = true;
     excludePackages = [ pkgs.xterm ];
-    
+
     # Enable the GNOME Desktop Environment.
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
@@ -86,7 +84,7 @@
   programs.dconf.enable = true;
 
   programs.adb.enable = true;
-  
+
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
   ];
