@@ -1,6 +1,12 @@
 { ... }:
 
 {
+  imports = [
+    ./services
+  ];
+
+  networking.domain = "nanall.ac";
+
   nix = {
     gc = {
       automatic = true;
@@ -13,4 +19,6 @@
       "flakes"
     ];
   };
+
+  time.timeZone = "Australia/Perth";
 }

@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/services
+    ../../common
     ./headscale.nix
     ./kanidm.nix
     ./backup.nix

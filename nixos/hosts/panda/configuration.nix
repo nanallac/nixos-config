@@ -8,7 +8,7 @@
     ./hardware-configuration.nix
     ./nextcloud.nix
     ./backup.nix
-    ../../modules/services
+    ../../common
   ];
 
   security.acme = {
