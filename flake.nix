@@ -49,7 +49,7 @@
           ./nixos/hosts/squid/configuration.nix
         ];
       };
-      
+
       "moose" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -58,14 +58,7 @@
           ./nixos/hosts/moose/configuration.nix
         ];
       };
-      
-      "chimp" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./nixos/hosts/chimp/configuration.nix
-        ];
-      };
-      
+
       "panda" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -83,7 +76,7 @@
               })
             ];
           })
-        
+
           ./nixos/hosts/rhino/configuration.nix
         ];
       };
@@ -93,7 +86,7 @@
       sshUser = "deploy";
       sshOpts = [ "-p" "22" ];
       user = "root";
-      
+
       autoRollback = false;
       magicRollback = false;
 
@@ -104,18 +97,21 @@
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."squid";
           };
         };
+
         "panda" = {
           hostname = "192.168.1.244";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."panda";
           };
         };
+
         "rhino" = {
           hostname = "192.168.1.109";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
           };
         };
+
         "moose" = {
           hostname = "192.168.1.40";
           profiles.system = {
