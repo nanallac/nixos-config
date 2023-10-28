@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }: 
+{ self, config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -8,8 +8,6 @@
     ./kanidm.nix
     ./backup.nix
   ];
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   security.acme = {
     acceptTerms = true;
@@ -78,7 +76,7 @@
   zramSwap.enable = true;
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact" 
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
   ];
 
   system.stateVersion = "22.11";
