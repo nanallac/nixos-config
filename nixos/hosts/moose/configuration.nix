@@ -30,9 +30,8 @@
     "L /var/lib/acme - - - - /keep/var/lib/acme"
   ];
 
-  # Enable the OpenSSH daemon and keep keys.
+  # Write the host keys to the keep
   services.openssh = {
-    enable = true;
     hostKeys = [
       {
         path = "/keep/ssh/ssh_host_ed25519_key";

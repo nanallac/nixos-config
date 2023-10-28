@@ -6,4 +6,6 @@
     ./fail2ban.nix
     # ./resolved.nix
   ];
+
+  services.openssh.enable = true;
 }

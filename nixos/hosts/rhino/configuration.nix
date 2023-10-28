@@ -39,7 +39,5 @@
 
   users.users.root.hashedPassword = "!";
 
-  services.openssh.enable = true;
-
   system.stateVersion = "23.05";
 }
