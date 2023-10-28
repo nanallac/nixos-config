@@ -16,10 +16,13 @@
       options = "--delete-older-than 30d";
     };
 
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
   };
 
   time.timeZone = "Australia/Perth";
