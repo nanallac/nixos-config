@@ -34,11 +34,6 @@
         modules = [
           ./nixos/hosts/koala/configuration.nix
           home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.josh = import ./nixos/hosts/koala/home.nix;
-          }
           # stylix.nixosModules.stylix
         ];
       };
