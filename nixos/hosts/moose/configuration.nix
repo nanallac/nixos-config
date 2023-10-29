@@ -13,9 +13,18 @@
   boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "moose";
-  networking.networkmanager.enable = true;
-  networking.hostId = "fd82eaf9";
+  # Media shares for Jellyfin - temporary, reassess once NAS migrated to be local.
+  fileSystems."/mnt/media" = {
+    device = "192.168.1.100:/mnt/storage0/media";
+    fsType = "nfs";
+  };
+
+  networking = {
+    hostName = "moose";
+    networkmanager.enable = true;
+    hostId = "fd82eaf9";
+    firewall.allowedTCPPorts = [ 80 443 ];
+  };
 
   # Keep the following directories
   # (https://grahamc.com/blog/erase-your-darlings/)
@@ -28,9 +37,44 @@
     "L /var/lib/fail2ban - - - - /keep/var/lib/fail2ban"
 
     # ACME certificates
-    "d /keep/var/lib/acme 0750 root root -"
+    "d /keep/var/lib/acme 0750 acme acme -"
     "L /var/lib/acme - - - - /keep/var/lib/acme"
+
+    # Jellyfin
+    "d /keep/var/lib/jellyfin 0700 jellyfin jellyfin -"
+    "L /var/lib/jellyfin - - - - /keep/var/lib/jellyfin"
   ];
+
+  # Jellyfin
+  services.jellyfin.enable   = true;
+
+  # NGINX
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings   = true;
+    recommendedProxySettings = true;
+    recommendedGzipSettings  = true;
+    recommendedOptimisation  = true;
+    virtualHosts = {
+      "_" = {
+        default = true;
+        rejectSSL = true;
+        extraConfig = "return 444;";
+      };
+      "media.nanall.ac" = {
+        forceSSL = true;
+        useACMEHost = "nanall.ac";
+        locations = {
+          "/" = {
+            proxyPass = "http://localhost:8096";
+            proxyWebsockets = true;
+          };
+        };
+      };
+    };
+  };
+
+  users.users.nginx.extraGroups = [ "acme" ];
 
   # Write the host keys to the keep
   services.openssh = {
