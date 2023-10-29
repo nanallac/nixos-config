@@ -87,6 +87,13 @@
       magicRollback = false;
 
       nodes = {
+        "koala" = {
+          hostname = "127.0.0.1";
+          profiles.system = {
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."koala";
+          };
+        };
+
         "squid" = {
           hostname = "175.45.180.229";
           profiles.system = {
