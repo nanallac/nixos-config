@@ -5,7 +5,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../common
-      #./kanidm.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -17,6 +16,11 @@
   fileSystems."/mnt/media" = {
     device = "192.168.1.100:/mnt/storage0/media";
     fsType = "nfs";
+    options = [
+      "auto"
+      "noatime"
+      "x-systemd.automount"
+    ];
   };
 
   networking = {
@@ -47,6 +51,7 @@
 
   # Jellyfin
   services.jellyfin.enable   = true;
+  users.users.jellyfin.extraGroups = [ "video" "render" ];
 
   # NGINX
   services.nginx = {
