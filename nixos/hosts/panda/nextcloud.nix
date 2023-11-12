@@ -8,7 +8,6 @@
 
     maxUploadSize = "16G";
     https = true;
-    enableBrokenCiphersForSSE = false;
 
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "02:00:00";
