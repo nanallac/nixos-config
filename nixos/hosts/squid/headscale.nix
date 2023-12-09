@@ -28,7 +28,7 @@ in
     oidc = {
       issuer = "https://idm.nanall.ac/oauth2/openid/headscale";
       client_id = "headscale";
-      client_secret_path = "/etc/headscale-client-secret";
+      client_secret_path = "/etc/oidc_client_secret";
     };
     };
   };

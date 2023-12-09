@@ -32,7 +32,7 @@
       defaultPhoneRegion = "AU";
     };
 
-    phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis ];
+    phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis all.smbclient ];
 
     extraOptions = {
       enabledPreviewProviders = [
