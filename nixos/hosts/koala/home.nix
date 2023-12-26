@@ -23,10 +23,6 @@
     freecad
     calibre
     inkscape
-    jdk20
-    clojure
-    clojure-lsp
-    leiningen
   ];
 
   programs.direnv.enable = true;
