@@ -4,8 +4,8 @@
   imports = [
     ../../common
     ../../common/users/josh
-    ./disk-config.nix
-    inputs.disko.nixosModules.disko
+    # ./disk-config.nix
+    # inputs.disko.nixosModules.disko
     inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
 
