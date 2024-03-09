@@ -22,6 +22,16 @@
     };
   };
 
+  fileSystems = {
+    "/" = {
+      device = "/dev/mmcblk1";
+      fsType = "ext4";
+      options = [ "noatime" ];
+    };
+  };
+
+  programs.zsh.enable = true;
+
   networking.networkmanager.enable = true;
   networking.hostName = "mouse";
 
