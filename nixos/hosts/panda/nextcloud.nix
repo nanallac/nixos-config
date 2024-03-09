@@ -3,7 +3,7 @@
 {
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud27;
+    package = pkgs.nextcloud28;
     hostName = "cloud.nanall.ac";
 
     maxUploadSize = "16G";
@@ -18,7 +18,6 @@
     };
 
     config = {
-      overwriteProtocol = "https";
 
       dbtype = "pgsql";
       dbuser = "nextcloud";
@@ -28,13 +27,13 @@
 
       adminpassFile = "/var/nextcloud-admin-pass";
       adminuser = "admin";
-
-      defaultPhoneRegion = "AU";
     };
 
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis all.smbclient ];
 
-    extraOptions = {
+    settings = {
+      defaultPhoneRegion = "AU";
+      overwriteProtocol = "https";
       enabledPreviewProviders = [
         "OC\\Preview\\Image"
         "OC\\Preview\\HEIC"
@@ -56,6 +55,8 @@
       allow_local_remote_servers = true;
       allow_user_to_change_display_name = false;
       lost_password_link = "disabled";
+      log_type = "syslog";
+      loglevel = 3;
     };
   };
 
@@ -65,7 +66,8 @@
     ensureUsers = [
       {
         name = "nextcloud";
-        ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+        # ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       }
     ];
     authentication = "local nextcloud nextcloud peer";
@@ -108,7 +110,7 @@
       '';
     };
   };
-  
+
   systemd.timers = {
     nextcloud-preview-generator = {
       wantedBy = [ "timers.target" ];

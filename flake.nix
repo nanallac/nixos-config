@@ -4,6 +4,11 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     home-manager = {
@@ -16,31 +21,30 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
+
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nanallac-nur = {
-      url = "github:nanallac/nur-packages";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, disko, deploy-rs, nanallac-nur, ... }@inputs: {
+  outputs = { self, nixpkgs, deploy-rs, ... }@inputs: {
+
     nixosConfigurations = {
       "koala" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ./nixos/hosts/koala/configuration.nix
-          home-manager.nixosModules.home-manager
-          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-          # stylix.nixosModules.stylix
         ];
       };
 
       "squid" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ./nixos/hosts/squid/configuration.nix
         ];
@@ -48,32 +52,25 @@
 
       "moose" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
-          disko.nixosModules.disko
-          ./nixos/hosts/moose/disk-config.nix
           ./nixos/hosts/moose/configuration.nix
         ];
       };
 
       "panda" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ./nixos/hosts/panda/configuration.nix
         ];
       };
 
-      "rhino" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      "mouse" = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
-          ({
-            nixpkgs.overlays = [
-              (final: prev: {
-                nanallac-nur = inputs.nanallac-nur.packages."${prev.system}";
-              })
-            ];
-          })
-
-          ./nixos/hosts/rhino/configuration.nix
+          ./nixos/hosts/mouse/configuration.nix
         ];
       };
     };
@@ -108,15 +105,15 @@
           };
         };
 
-        "rhino" = {
-          hostname = "192.168.1.109";
+        "moose" = {
+          hostname = "192.168.1.40";
           profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."rhino";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
           };
         };
 
-        "moose" = {
-          hostname = "192.168.1.40";
+        "mouse" = {
+          hostname = "192.168.1.41";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
           };

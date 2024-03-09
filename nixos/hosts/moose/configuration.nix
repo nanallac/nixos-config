@@ -1,33 +1,40 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./disk-config.nix
+      inputs.disko.nixosModules.disko
+      inputs.impermanence.nixosModules.impermanence
       ../../common
+      ./jellyfin.nix
+      ./calibre-web.nix
+#      ./forgejo.nix
     ];
+
+  nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Media shares for Jellyfin - temporary, reassess once NAS migrated to be local.
-  fileSystems."/mnt/media" = {
-    device = "192.168.1.100:/mnt/storage0/media";
-    fsType = "nfs";
-    options = [
-      "auto"
-      "noatime"
-      "x-systemd.automount"
-    ];
-  };
-
   networking = {
     hostName = "moose";
     networkmanager.enable = true;
     hostId = "fd82eaf9";
     firewall.allowedTCPPorts = [ 80 443 ];
+  };
+
+  environment.persistence."/keep" = {
+    directories = [
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
   };
 
   # Keep the following directories
@@ -44,14 +51,14 @@
     "d /keep/var/lib/acme 0750 acme acme -"
     "L /var/lib/acme - - - - /keep/var/lib/acme"
 
-    # Jellyfin
-    "d /keep/var/lib/jellyfin 0700 jellyfin jellyfin -"
-    "L /var/lib/jellyfin - - - - /keep/var/lib/jellyfin"
-  ];
+    # Forgejo
+    # "d /keep/var/lib/forgejo 0700 forgejo forgejo -"
+    # "L /var/lib/forgejo - - - - /keep/var/lib/forgejo"
 
-  # Jellyfin
-  services.jellyfin.enable   = true;
-  users.users.jellyfin.extraGroups = [ "video" "render" ];
+    # Postgres
+    # "d /keep/var/lib/postgres 0700 postgres postgres -"
+    # "L /var/lib/postgres - - - - /keep/var/lib/postgres"
+  ];
 
   # NGINX
   services.nginx = {
@@ -65,16 +72,6 @@
         default = true;
         rejectSSL = true;
         extraConfig = "return 444;";
-      };
-      "media.nanall.ac" = {
-        forceSSL = true;
-        useACMEHost = "nanall.ac";
-        locations = {
-          "/" = {
-            proxyPass = "http://localhost:8096";
-            proxyWebsockets = true;
-          };
-        };
       };
     };
   };
@@ -97,6 +94,11 @@
   };
 
   # ACME certificates
+  # Secrets
+  sops.secrets.porkbun = {
+    owner = "acme";
+  };
+
   security.acme = {
     acceptTerms = true;
     defaults.email = "josh@callanan.contact";
@@ -105,7 +107,7 @@
       domain = "nanall.ac";
       extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
-      credentialsFile = "/var/lib/acme/porkbun";
+      credentialsFile = "/run/secrets/porkbun";
     };
   };
 

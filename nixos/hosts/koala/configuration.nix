@@ -1,10 +1,12 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
     [
       ./hardware-configuration.nix
       ../../common
+      inputs.home-manager.nixosModules.home-manager
+      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       # ./stylix.nix
     ];
 
@@ -17,6 +19,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   networking.hostName = "koala"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -88,8 +91,10 @@
 
   # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
   };
 
   # Enable CUPS to print documents.
@@ -110,6 +115,15 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+
+  # For Davinci Resolve
+  hardware.opengl = {
+    enable = true;
+    driSupport32Bit = true;
+    extraPackages = [
+      pkgs.intel-compute-runtime
+    ];
   };
 
   # Enable touchpad support (enabled default in most desktopManager).

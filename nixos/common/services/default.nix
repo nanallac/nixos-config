@@ -4,6 +4,7 @@
   imports = [
     ./tailscale.nix
     ./fail2ban.nix
+    ./sops.nix
     # ./resolved.nix
   ];
 

@@ -11,7 +11,9 @@
     ];
     repository = "b2:cloud-nanall-ac";
     timerConfig = {
-      OnUnitActiveSec = "1d";
+      OnCalendar = "02:00";
+      Persistent = true;
+      RandomizedDelaySec = "1h";
     };
     pruneOpts = [
       "--keep-daily 3"

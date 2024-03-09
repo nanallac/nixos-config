@@ -6,8 +6,14 @@
     ../../common
     ./headscale.nix
     ./kanidm.nix
-    ./backup.nix
+    ./josh.callanan.contact.nix
   ];
+
+  # ACME certificates
+  # Secrets
+  sops.secrets.porkbun = {
+    owner = "acme";
+  };
 
   security.acme = {
     acceptTerms = true;
@@ -17,46 +23,28 @@
       domain = "nanall.ac";
       extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
-      credentialsFile = "/root/porkbun";
+      credentialsFile = "/run/secrets/porkbun";
+    };
+
+    certs."callanan.contact" = {
+      domain = "callanan.contact";
+      extraDomainNames = [ "*.callanan.contact" ];
+      dnsProvider = "porkbun";
+      credentialsFile = "/run/secrets/porkbun";
     };
   };
 
-  services = {
-    nginx = {
-      enable = true;
-      recommendedTlsSettings = true;
-      recommendedProxySettings = true;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      virtualHosts = {
-        "_" = {
-          default = true;
-          rejectSSL = true;
-          extraConfig = "return 444;";
-        };
-        "tailscale.nanall.ac" = {
-          forceSSL = true;
-          useACMEHost = "nanall.ac";
-          locations = {
-            "/" = {
-              proxyPass = "http://localhost:${toString config.services.headscale.port}";
-              proxyWebsockets = true;
-            };
-            "metrics" = {
-              proxyPass = "http://${config.services.headscale.settings.metrics_listen_addr}/metrics";
-            };
-          };
-        };
-        "idm.nanall.ac" = {
-          forceSSL = true;
-          useACMEHost = "nanall.ac";
-          locations = {
-            "/" = {
-              proxyPass = "https://localhost:8443";
-              proxyWebsockets = true;
-            };
-          };
-        };
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedProxySettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    virtualHosts = {
+      "_" = {
+        default = true;
+        rejectSSL = true;
+        extraConfig = "return 444;";
       };
     };
   };

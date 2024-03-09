@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    iosevka
     gnomeExtensions.pop-shell
     gnomeExtensions.gsconnect
     evince
@@ -22,7 +23,11 @@
     kanidm
     freecad
     calibre
+    sops
     inkscape
+    davinci-resolve
+    ffmpeg
+    freetube
   ];
 
   programs.direnv.enable = true;
@@ -62,7 +67,7 @@
       theme = "bogster";
     };
   };
-  
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;

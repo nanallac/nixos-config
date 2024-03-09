@@ -6,24 +6,40 @@
 {
   # Motherboard MW-NAS-N5105
 
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  # Ensure BIOS configuration:
+  # Chipset -> System Agent (SA) Configuration -> Memory Configuration -> SA GV: Disabled
+  # (source: https://forums.servethehome.com/index.php?threads/topton-nas-motherboard.37979/page-8#post-377379)
+
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "coretemp" "it87" "kvm-intel" ];
-  boot.kernelParams = [ "acpi=off" "noapic" ]; # to prevent panics
+  boot.initrd.kernelModules = [
+    "i915" # nixos-hardware/common/gpu/intel/default.nix
+  ];
+  boot.kernelModules = [ "coretemp" "kvm-intel" ];
+  boot.kernelParams = [
+    "i915.modeset=1"
+    "i915.enable_guc=2" # nixos-hardware/common/cpu/intel/jasper-lake/default.nix
+  ];
   boot.extraModulePackages = [ ];
 
-  # enable accelerated video playback
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  # nixos-hardware/common/gpu/intel/default.nix
+  environment.variables = {
+    VDPAU_DRIVER = lib.mkIf config.hardware.opengl.enable (lib.mkDefault "va_gl");
+  };
+
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
+      (if (lib.versionOlder (lib.versions.majorMinor lib.version) "23.11") then vaapiIntel else intel-vaapi-driver)
       libvdpau-va-gl
+      intel-media-driver
+      intel-compute-runtime # OpenCL filter support
     ];
   };
 
@@ -39,5 +55,5 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
 }
