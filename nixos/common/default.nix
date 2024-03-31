@@ -1,10 +1,12 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ./services
     ./users
   ];
+
+  environment.systemPackages = [ pkgs.screen ];
 
   boot.tmp.cleanOnBoot = true;
 

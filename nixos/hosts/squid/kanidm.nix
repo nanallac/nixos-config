@@ -1,7 +1,7 @@
 { inputs, config, pkgs, ... }:
 
 let
-  domain = "nanall.ac";
+  domain = config.networking.domain;
   url = "idm.${domain}";
   inherit (config.security.acme) certs;
 in
@@ -23,9 +23,9 @@ in
     clientSettings.uri = "https://${url}";
   };
 
-  services.nginx.virtualHosts."idm.nanall.ac" = {
+  services.nginx.virtualHosts."${url}" = {
     forceSSL = true;
-    useACMEHost = "nanall.ac";
+    useACMEHost = domain;
     locations = {
       "/" = {
         proxyPass = "https://localhost:8443";
@@ -46,9 +46,12 @@ in
 
   services.restic.backups.idm-nanall-ac = {
     initialize = true;
-    passwordFile = "/run/secrets/idm/restic";
-    repositoryFile = "/run/secrets/idm/backblaze/repo";
-    environmentFile = "/run/secrets/idm/backblaze/env";
+    # passwordFile = "/run/secrets/idm/restic";
+    passwordFile = config.sops.secrets."idm/restic".path;
+    # repositoryFile = "/run/secrets/idm/backblaze/repo";
+    repositoryFile = config.sops.secrets."idm/backblaze/repo".path;
+    # environmentFile = "/run/secrets/idm/backblaze/env";
+    environmentFile = config.sops.secrets."idm/backblaze/env".path;
     paths = [
       "/var/lib/kanidm"
     ];

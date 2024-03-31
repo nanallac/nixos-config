@@ -23,14 +23,14 @@
       domain = "nanall.ac";
       extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
-      credentialsFile = "/run/secrets/porkbun";
+      credentialsFile = config.sops.secrets.porkbun.path;
     };
 
     certs."callanan.contact" = {
       domain = "callanan.contact";
       extraDomainNames = [ "*.callanan.contact" ];
       dnsProvider = "porkbun";
-      credentialsFile = "/run/secrets/porkbun";
+      credentialsFile = config.sops.secrets.porkbun.path;
     };
   };
 

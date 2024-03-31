@@ -56,9 +56,9 @@
   # Backup jellyfin folder
   services.restic.backups.media-nanall-ac = {
     initialize = true;
-    passwordFile = "/run/secrets/media/restic";
-    repositoryFile = "/run/secrets/media/backblaze/repo";
-    environmentFile = "/run/secrets/media/backblaze/env";
+    passwordFile = config.sops.secrets."media/restic".path;
+    repositoryFile = config.sops.secrets."media/backblaze/repo".path;
+    environmentFile = config.sops.secrets."media/backblaze/env".path;
     paths = [
       "/keep/var/lib/jellyfin"
     ];

@@ -5,8 +5,8 @@ let
   url = "nvr.${domain}";
 in
 {
-  environment.systemPackages = with pkgs; [
-    gasket
+  environment.systemPackages = [
+    pkgs.gasket
   ];
   services.frigate = {
     enable = true;
@@ -24,7 +24,7 @@ in
       ];
       cameras."front_porch" = {
         ffmpeg.inputs = [
-          { 
+          {
             path = "rtsp://admin:uPp5NUW6mvo7E4XP@192.168.40.2:554/cam/realmonitor?channel=1&subtype=1";
             roles = [ "detect" ];
           }

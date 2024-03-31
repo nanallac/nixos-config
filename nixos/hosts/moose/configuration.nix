@@ -1,17 +1,17 @@
 { inputs, config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./disk-config.nix
-      inputs.disko.nixosModules.disko
-      inputs.impermanence.nixosModules.impermanence
-      ../../common
-      ./jellyfin.nix
-      ./calibre-web.nix
-#      ./forgejo.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ./disk-config.nix
+    inputs.disko.nixosModules.disko
+    inputs.impermanence.nixosModules.impermanence
+    ../../common
+    ./jellyfin.nix
+    ./calibre-web.nix
+    ./freshrss.nix
+    # ./forgejo.nix
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -107,7 +107,7 @@
       domain = "nanall.ac";
       extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
-      credentialsFile = "/run/secrets/porkbun";
+      credentialsFile = config.sops.secrets.porkbun.path;
     };
   };
 

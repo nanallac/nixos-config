@@ -44,8 +44,10 @@ in
   };
 
   services.nginx.virtualHosts."${url}" = {
-    enableACME = true;
+    useACMEHost = "nanall.ac";
     forceSSL = true;
-    locations."/".proxyPass = "http://localhost:${builtins.toString config.services.forgejo.settings.server.HTTP_PORT}";
+    locations."/" = {
+      proxyPass = "http://localhost:${builtins.toString config.services.forgejo.settings.server.HTTP_PORT}";
+    };
   };
 }

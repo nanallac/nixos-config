@@ -6,7 +6,11 @@ let
 in
 {
   sops.secrets = {
-    "tailscale/oidc_client_secret" = {};
+    "tailscale/oidc_client_secret" = {
+      owner = config.services.headscale.user;
+      group = config.services.headscale.group;
+      mode = "0440";
+    };
   };
 
   services.headscale = {
@@ -14,11 +18,9 @@ in
     port = 8085;
     settings = {
       server_url = "https://${url}";
-      metrics_listen_addr = "127.0.0.1:8095";
       dns_config = {
         override_local_dns = true;
         base_domain = "${domain}";
-        # magic_dns = true;
         nameservers = [
           "192.168.1.1"
           "9.9.9.9"
@@ -33,8 +35,7 @@ in
       oidc = {
         issuer = "https://idm.nanall.ac/oauth2/openid/headscale";
         client_id = "headscale";
-        # client_secret_path = "/run/secrets/tailscale/oidc_client_secret";
-        client_secret = "xZubCFPygLfp0M94g4DbkK66QEMEXLFecPXkhHCLtZQhDgbV";
+        client_secret_path = config.sops.secrets."tailscale/oidc_client_secret".path;
         scope = [ "openid" "profile" "email" ];
       };
     };
@@ -42,12 +43,12 @@ in
 
   environment.systemPackages = [ config.services.headscale.package ];
 
-  services.nginx.virtualHosts."tailscale.nanall.ac" = {
+  services.nginx.virtualHosts."${url}" = {
     forceSSL = true;
-    useACMEHost = "nanall.ac";
+    useACMEHost = config.networking.domain;
     locations = {
       "/" = {
-        proxyPass = "http://localhost:${toString config.services.headscale.port}";
+        proxyPass = "http://${config.services.headscale.address}:${toString config.services.headscale.port}";
         proxyWebsockets = true;
       };
     };

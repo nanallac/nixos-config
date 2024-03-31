@@ -1,3 +1,4 @@
+
 { lib, config, pkgs, options, ... }:
 
 {
@@ -42,7 +43,9 @@
         "OC\\Preview\\MKV"
         "OC\\Preview\\MP4"
         "OC\\Preview\\AVI"
+        "OC\\Preview\\Imaginary"
       ];
+      preview_imaginary_url = "http://${builtins.toString config.services.imaginary.address}:${builtins.toString config.services.imaginary.port}";
       redis = {
         host = "/run/redis-nextcloud/redis.sock";
         port = 0;
@@ -56,8 +59,13 @@
       allow_user_to_change_display_name = false;
       lost_password_link = "disabled";
       log_type = "syslog";
-      loglevel = 3;
+      loglevel = 0;
     };
+  };
+
+  services.imaginary = {
+    enable = true;
+    settings.return-size = true;
   };
 
   services.postgresql = {
@@ -66,7 +74,6 @@
     ensureUsers = [
       {
         name = "nextcloud";
-        # ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
         ensureDBOwnership = true;
       }
     ];
@@ -82,6 +89,7 @@
   services.samba.enable = true;
   services.postfix.enable = true;
   environment.systemPackages = [
+    pkgs.nodejs_18 # for Recognize
     pkgs.ffmpeg
     pkgs.sudo
   ];
@@ -94,10 +102,6 @@
     nextcloud-preview-generator = {
       serviceConfig.Type = "oneshot";
       script = "${pkgs.sudo}/bin/sudo -i nextcloud-occ preview:pre-generate";
-    };
-    nextcloud-face-recognition = {
-      serviceConfig.Type = "oneshot";
-      script = "${pkgs.sudo}/bin/sudo -i nextcloud-occ face:background_job -t 900";
     };
     nextcloud-postgresql-backup = {
       requires = [ "postgresql.service" ];
@@ -118,15 +122,6 @@
       timerConfig = {
         OnCalendar = "daily";
         Unit = "nextcloud-preview-generator.service";
-      };
-    };
-    nextcloud-face-recognition = {
-      wantedBy = [ "timers.target" ];
-      partOf = [ "nextcloud-preview-generator.service"];
-      timerConfig = {
-        OnBootSec = "30min";
-        OnUnitActiveSec = "30min";
-        Unit = "nextcloud-face-recognition.service";
       };
     };
     nextcloud-postgresql-backup = {
