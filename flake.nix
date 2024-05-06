@@ -29,6 +29,11 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    yourstruly-sydney = {
+      url = "github:sydbross/yourstruly.sydney";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, deploy-rs, ... }@inputs: {
@@ -65,14 +70,6 @@
           ./nixos/hosts/panda/configuration.nix
         ];
       };
-
-      "mouse" = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/mouse/configuration.nix
-        ];
-      };
     };
 
     deploy = {
@@ -107,13 +104,6 @@
 
         "moose" = {
           hostname = "192.168.1.40";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
-          };
-        };
-
-        "mouse" = {
-          hostname = "192.168.1.41";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
           };

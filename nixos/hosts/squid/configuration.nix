@@ -7,6 +7,7 @@
     ./headscale.nix
     ./kanidm.nix
     ./josh.callanan.contact.nix
+    ./yourstruly-sydney.nix
   ];
 
   # ACME certificates

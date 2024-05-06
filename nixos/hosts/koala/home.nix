@@ -17,15 +17,11 @@
     bitwarden-cli
     bitwarden
     super-slicer-latest
-    gnome.gnome-boxes
     thunderbird
-    endeavour
     kanidm
     freecad
-    calibre
     sops
     inkscape
-    davinci-resolve
     ffmpeg
     freetube
   ];
