@@ -4,6 +4,8 @@ let
   username = "deploy";
 in
 {
+  imports = [ ./josh ];
+  
   users.users."${username}" = {
     description = "System Deployment";
     isNormalUser = true;

@@ -18,4 +18,5 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
     ];
   };
+  programs.zsh.enable = true;
 }

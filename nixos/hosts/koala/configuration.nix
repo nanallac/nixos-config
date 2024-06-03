@@ -132,12 +132,12 @@
   programs.zsh.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.josh = {
-    isNormalUser = true;
-    description = "Josh Callanan";
-    shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-  };
+  # users.users.josh = {
+  #   isNormalUser = true;
+  #   description = "Josh Callanan";
+  #   shell = pkgs.zsh;
+  #   extraGroups = [ "networkmanager" "wheel" "adbusers" ];
+  # };
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
