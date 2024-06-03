@@ -10,6 +10,7 @@
     ./jellyfin.nix
     ./calibre-web.nix
     ./freshrss.nix
+    ./vector.nix
     # ./forgejo.nix
   ];
 
