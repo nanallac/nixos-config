@@ -21,13 +21,6 @@ in
       dns_config = {
         override_local_dns = true;
         base_domain = "${domain}";
-        nameservers = [
-          "192.168.1.1"
-          "9.9.9.9"
-        ];
-        restricted_nameservers = {
-          "${domain}" = [ "192.168.1.1" ];
-        };
       };
       ip_prefixes = [
         "100.64.0.0/10"
