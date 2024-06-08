@@ -11,6 +11,7 @@
     ./calibre-web.nix
     ./freshrss.nix
     ./vector.nix
+    ./reverse-proxy.nix
     # ./forgejo.nix
   ];
 
