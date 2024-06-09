@@ -20,7 +20,9 @@ in
       server_url = "https://${url}";
       dns_config = {
         override_local_dns = true;
-        base_domain = "${domain}";
+        nameservers = [ "192.168.1.1" ];
+        domains = [ "nanall.ac" ];
+        magic_dns = false;
       };
       ip_prefixes = [
         "100.64.0.0/10"
