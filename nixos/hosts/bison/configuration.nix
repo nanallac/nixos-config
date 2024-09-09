@@ -1,39 +1,40 @@
 { inputs, config, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../../common
-      inputs.home-manager.nixosModules.home-manager
-      inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-    ];
+  imports = [
+    inputs.disko.nixosModules.disko
+    inputs.home-manager.nixosModules.home-manager
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-gpu-amd
+
+    ./hardware-configuration.nix
+    ./disk-config.nix
+    ../../common
+    ./sunshine.nix
+  ];
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    gamescopeSession.enable = true;
+  };
 
   # Home Manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users.josh = import ./home.nix;
+  home-manager.users.josh = import ./../koala/home.nix;
 
-  # Virtualisation
-  virtualisation = {
-    waydroid.enable = true;
-    docker.enable = true;
-  };
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  networking.hostName = "koala"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Enable networking
+  networking.hostName = "bison";
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  # Select internationalisation properties.
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 3;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+   # Select internationalisation properties.
   i18n.defaultLocale = "en_AU.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -55,16 +56,7 @@
 
     # Enable the GNOME Desktop Environment.
     displayManager.gdm.enable = true;
-    desktopManager.gnome = {
-      enable = true;
-      # extraGSettingsOverrides = ''
-      #   [org.gnome.shell]
-      #   enabled-extensions=['gsconnect@andyholmes.github.io', 'caffeine@patapon.info']
-      # '';
-      # extraGSettingsOverridePackages = [
-      #   pkgs.gnome.gnome-shell
-      # ];
-    };
+    desktopManager.gnome.enable = true;
   };
 
   environment.gnome.excludePackages = (with pkgs; [
@@ -99,15 +91,10 @@
 
   programs.adb.enable = true;
 
-  programs.kdeconnect = {
-    enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
-  };
-
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
-    gnomeExtensions.gsconnect
-    docker-compose
+    gnome3.gnome-session
+    gnome.gnome-remote-desktop
   ];
 
   # Configure keymap in X11
@@ -130,21 +117,6 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # For Davinci Resolve
-  hardware.opengl = {
-    enable = true;
-    driSupport32Bit = true;
-    extraPackages = [
-      pkgs.intel-compute-runtime
-    ];
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -152,16 +124,8 @@
 
   programs.zsh.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.josh = {
-  #   isNormalUser = true;
-  #   description = "Josh Callanan";
-  #   shell = pkgs.zsh;
-  #   extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-  # };
-
   # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.enable = false;
   services.displayManager.autoLogin.user = "josh";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
@@ -171,5 +135,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
+
 }

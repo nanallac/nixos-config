@@ -12,6 +12,12 @@ in
       "wheel"
     ] ++ ifTheyExist [
       "networkmanager"
+      "docker"
+      "audio"
+      "video"
+      "disk"
+      "input"
+      "render"
     ];
     hashedPassword = "$6$0KOODrlgZ8LGrmKe$.fS3JbK3ey4HCOQozYhhkT21YsxM/m80FUkuB47HsN7F1ILrgYNsIriLUd0/VXhRFdm9VE2WJ2eOUkV9g.ILf/";
     openssh.authorizedKeys.keys = [

@@ -10,7 +10,7 @@
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     iosevka
     gnomeExtensions.pop-shell
-    gnomeExtensions.gsconnect
+    gnomeExtensions.caffeine
     evince
     tree
     htop
@@ -24,6 +24,10 @@
     inkscape
     ffmpeg
     freetube
+    remmina
+    moonlight-qt
+
+    gnome.gnome-remote-desktop
   ];
 
   programs.direnv.enable = true;
@@ -101,6 +105,8 @@
         "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
         "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
+        "gsconnect@andyholmes.github.io"
+        "caffeine@patapon.info"
       ];
     };
   };

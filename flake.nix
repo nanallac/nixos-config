@@ -47,6 +47,14 @@
         ];
       };
 
+      "bison" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./nixos/hosts/bison/configuration.nix
+        ];
+      };
+
       "squid" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
@@ -85,6 +93,13 @@
           hostname = "127.0.0.1";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."koala";
+          };
+        };
+
+        "bison" = {
+          hostname = "192.168.1.231";
+          profiles.system = {
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."bison";
           };
         };
 

@@ -8,6 +8,7 @@
     ./kanidm.nix
     ./josh.callanan.contact.nix
     ./yourstruly-sydney.nix
+    ./peertube.nix
   ];
 
   # ACME certificates
