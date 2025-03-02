@@ -38,6 +38,8 @@
       "/var/lib/systemd/coredump"
       "/var/lib/tailscale"
       "/var/lib/postgresql"
+      "/var/lib/fail2ban"
+      "/var/lib/acme"
     ];
   };
 
@@ -46,14 +48,6 @@
   systemd.tmpfiles.rules = [
     # SSH
     "d /keep/ssh 0755 root root -"
-
-    # fail2ban
-    "d /keep/var/lib/fail2ban 0750 root root -"
-    "L /var/lib/fail2ban - - - - /keep/var/lib/fail2ban"
-
-    # ACME certificates
-    "d /keep/var/lib/acme 0750 acme acme -"
-    "L /var/lib/acme - - - - /keep/var/lib/acme"
   ];
 
   # NGINX
