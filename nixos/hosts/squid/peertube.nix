@@ -55,8 +55,8 @@ in
       #     prefix = "streaming-playlists/";
       #   };
       #   credentials = {
-      #     access_key_id = "0006150d456e59a000000000c";
-      #     secret_access_key = "K000W76goWdvAWSAXIozC0iNuSr5ab8";
+      #     access_key_id = "";
+      #     secret_access_key = "";
       #   };
       # };
     };

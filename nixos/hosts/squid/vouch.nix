@@ -24,7 +24,7 @@ in
           allowAllUsers = true;
           cookie.domain = domain;
 
-          jwt.secret = "bc1dc26c9cdb063323724f8d3b81ba6686151f79db976548243e6dd982e9139d";
+          jwt.secret = "";
         };
         oauth =
           let
@@ -34,7 +34,7 @@ in
             provider = "oidc";
             client_id = "vouch";
             # oauth2_rs_basic_secret from `kanidm system oauth2 get gollum`
-            client_secret = "CvfjKJYhyghEUfwtJX3tZwKpEqtg01c06PKuMes8xQ75hZWx";
+            client_secret = "";
             auth_url = "${kanidmOrigin}/ui/oauth2";
             token_url = "${kanidmOrigin}/oauth2/token";
             user_info_url = "${kanidmOrigin}/oauth2/openid/${client_id}/userinfo";
