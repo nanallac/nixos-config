@@ -6,6 +6,7 @@
     ../../common
     ./headscale.nix
     ./kanidm.nix
+    # ./vouch.nix
     ./josh.callanan.contact.nix
     ./yourstruly-sydney.nix
     ./peertube.nix

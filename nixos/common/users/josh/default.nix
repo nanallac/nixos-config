@@ -25,4 +25,11 @@ in
     ];
   };
   programs.zsh.enable = true;
+  fonts.packages = [ pkgs.fira-code pkgs.fira-code-symbols ];
+  environment.systemPackages = [
+    pkgs.foot
+    pkgs.waypipe
+    pkgs.librewolf
+    pkgs.scrcpy
+  ];
 }

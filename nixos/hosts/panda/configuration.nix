@@ -4,7 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ./nextcloud.nix
-    ./backup.nix
+    # ./backup.nix
     ../../common
   ];
 
@@ -29,7 +29,7 @@
     recommendedTlsSettings = true;
 
     sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
-    
+
     virtualHosts = {
       "cloud.nanall.ac" = {
         forceSSL = true;

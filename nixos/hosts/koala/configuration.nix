@@ -20,6 +20,18 @@
     docker.enable = true;
   };
 
+  services.xrdp = {
+    enable = true;
+    defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+    openFirewall = true;
+  };
+
+  networking.firewall = {
+    allowedTCPPorts = [ 3389 ];
+    allowedUDPPorts = [ 3389 ];
+  };
+
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -27,7 +39,6 @@
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   networking.hostName = "koala"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -57,13 +68,6 @@
     displayManager.gdm.enable = true;
     desktopManager.gnome = {
       enable = true;
-      # extraGSettingsOverrides = ''
-      #   [org.gnome.shell]
-      #   enabled-extensions=['gsconnect@andyholmes.github.io', 'caffeine@patapon.info']
-      # '';
-      # extraGSettingsOverridePackages = [
-      #   pkgs.gnome.gnome-shell
-      # ];
     };
   };
 
@@ -72,10 +76,9 @@
     gnome-tour
     gnome-usage
     gnome-text-editor
-    gnome-connections
     baobab
     evince
-  ]) ++ (with pkgs.gnome; [
+  ]) ++ (with pkgs; [
     cheese
     gnome-music
     epiphany
@@ -92,7 +95,6 @@
     simple-scan
     gnome-logs
     eog
-    # gnome-disk-utility
   ]);
 
   programs.dconf.enable = true;
@@ -105,10 +107,26 @@
   };
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome-tweaks
+    gnome-tweaks
     gnomeExtensions.gsconnect
     docker-compose
+    gnome-remote-desktop
+
+    android-tools
+    android-udev-rules
   ];
+
+  services.gnome.gnome-remote-desktop.enable = true;
+
+  services.fprintd = {
+    enable = true;
+
+    package = pkgs.fprintd-tod;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-vfs0090;
+    };
+  };
 
   # Configure keymap in X11
   services.xserver = {
@@ -130,35 +148,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
-
-  # For Davinci Resolve
-  hardware.opengl = {
-    enable = true;
-    driSupport32Bit = true;
-    extraPackages = [
-      pkgs.intel-compute-runtime
-    ];
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   programs.zsh.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.josh = {
-  #   isNormalUser = true;
-  #   description = "Josh Callanan";
-  #   shell = pkgs.zsh;
-  #   extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-  # };
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;

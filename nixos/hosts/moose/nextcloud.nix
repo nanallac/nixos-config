@@ -23,19 +23,21 @@
       dbuser = "nextcloud";
       dbhost = "/run/postgresql";
       dbname = "nextcloud";
-      # dbpassFile = "/var/nextcloud-db-pass";
       dbpassFile = config.sops.secrets."nextcloud/database/dbpass".path;
 
-      # adminpassFile = "/var/nextcloud-admin-pass";
       adminpassFile = config.sops.secrets."nextcloud/database/adminpass".path;
       adminuser = "admin";
+    };
+
+    phpOptions = {
+      "opcache.interned_strings_buffer" = "23";
     };
 
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis all.smbclient ];
 
     settings = {
-      defaultPhoneRegion = "AU";
-      overwriteProtocol = "https";
+      default_phone_region = "AU";
+      overwriteprotocol = "https";
       enabledPreviewProviders = [
         "OC\\Preview\\Image"
         "OC\\Preview\\HEIC"
@@ -51,16 +53,16 @@
         host = "/run/redis-nextcloud/redis.sock";
         port = 0;
       };
-      memcache = {
-        local = "\\OC\\Memcache\\APCu";
-        distributed = "\\OC\\Memcache\\Redis";
-        locking = "\\OC\\Memcache\\Redis";
-      };
+      "memcache.local" = "\\OC\\Memcache\\APCu";
+      "memcache.distributed" = "\\OC\\Memcache\\Redis";
+      "memcache.locking" = "\\OC\\Memcache\\Redis";
+      maintenance_window_start = "20";
       allow_local_remote_servers = true;
       allow_user_to_change_display_name = false;
       lost_password_link = "disabled";
       log_type = "syslog";
       loglevel = 0;
+      notify_push.enable = true;
     };
   };
 
@@ -98,8 +100,8 @@
 
   systemd.services = {
     nextcloud-setup = {
-      requires = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      requires = [ "postgresql.service" "var-lib-nextcloud.mount" ];
+      after = [ "postgresql.service" "var-lib-nextcloud.mount" ];
     };
     nextcloud-preview-generator = {
       serviceConfig.Type = "oneshot";
@@ -136,6 +138,28 @@
     };
   };
 
+  # Impermanence
+
+
+  environment.persistence."/keep" = {
+    directories = [
+      {
+        directory = "/var/lib/nextcloud";
+        user = "nextcloud";
+        group = "nextcloud";
+        mode = "u=rwx,g=rwx,o=";
+      }
+      {
+        directory = "/var/lib/redis-nextcloud";
+        user = "nextcloud";
+        group = "nextcloud";
+        mode = "u=rwx,g=rwx,o=";
+      }
+    ];
+  };
+
+  # Backups
+
   sops.secrets = {
     "nextcloud/database/dbpass" = {
       mode = "0600";
@@ -158,7 +182,7 @@
     repositoryFile = config.sops.secrets."nextcloud/backblaze/repo".path;
     environmentFile = config.sops.secrets."nextcloud/backblaze/env".path;
     paths = [
-      "/var/lib/nextcloud"
+      "/keep/var/lib/nextcloud"
     ];
     timerConfig = {
       OnCalendar = "02:00";
@@ -170,5 +194,23 @@
       "--keep-weekly 2"
       "--keep-yearly 1"
     ];
+  };
+
+  services.nginx = {
+    enable = true;
+
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
+
+    virtualHosts = {
+      "cloud.nanall.ac" = {
+        forceSSL = true;
+        useACMEHost = "nanall.ac";
+      };
+    };
   };
 }

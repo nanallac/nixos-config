@@ -42,5 +42,12 @@ in
         proxyPass = "http://192.168.1.61";
       };
     };
+    "sprinklers.${domain}" = {
+      forceSSL = true;
+      useACMEHost = domain;
+      locations."/" = {
+        proxyPass = "http://192.168.30.202";
+      };
+    };
   };
 }

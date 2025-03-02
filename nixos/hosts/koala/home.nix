@@ -4,10 +4,16 @@
   home.username = "josh";
   home.homeDirectory = "/home/josh";
 
-  fonts.fontconfig.enable = true;
+  home.shellAliases = {
+    e = "emacsclient -nw";
+  };
+
+  fonts.fontconfig = {
+    enable = true;
+  };
 
   home.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+
     iosevka
     gnomeExtensions.pop-shell
     gnomeExtensions.caffeine
@@ -16,7 +22,6 @@
     htop
     bitwarden-cli
     bitwarden
-    super-slicer-latest
     thunderbird
     kanidm
     freecad
@@ -26,8 +31,15 @@
     freetube
     remmina
     moonlight-qt
+    # orca-slicer
 
-    gnome.gnome-remote-desktop
+    gnome-remote-desktop
+
+    nixfmt-classic
+    clojure-lsp
+    nil
+    nodePackages.bash-language-server
+    shfmt
   ];
 
   programs.direnv.enable = true;
@@ -42,7 +54,7 @@
     enable = true;
     autocd = true;
     dotDir = ".config/zsh";
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     initExtra = ''
@@ -84,7 +96,7 @@
   programs.git = {
     enable = true;
     userName = "Josh Callanan";
-    userEmail = "joshua.callanan@pm.me";
+    userEmail = "josh@callanan.contact";
     extraConfig = {
       init.defaultBranch = "main";
       url = {

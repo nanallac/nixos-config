@@ -33,32 +33,32 @@ in
       instance.name = "nanall.ac videos";
       menu.login.redirect_on_single_external_auth = true;
       log.level = "debug";
-      object_storage = {
-        enabled = true;
-        endpoint = "s3.us-west-000.backblazeb2.com";
-        max_upload_part = "10MB";
-        upload_acl = {
-          public = "public-read";
-          private = "private";
-        };
-        max_request_attempts = 3;
-        web_videos = {
-          bucket_name = "videos-nanall-ac";
-          prefix = "web-videos/";
-        };
-        original_video_files = {
-          bucket_name = "videos-nanall-ac";
-          prefix = "original-video-files/";
-        };
-        streaming_playlists= {
-          bucket_name = "videos-nanall-ac";
-          prefix = "streaming-playlists/";
-        };
-        credentials = {
-          access_key_id = "";
-          secret_access_key = "";
-        };
-      };
+      # object_storage = {
+      #   enabled = true;
+      #   endpoint = "s3.us-west-000.backblazeb2.com";
+      #   max_upload_part = "10MB";
+      #   upload_acl = {
+      #     public = "public-read";
+      #     private = "private";
+      #   };
+      #   max_request_attempts = 3;
+      #   web_videos = {
+      #     bucket_name = "videos-nanall-ac";
+      #     prefix = "web-videos/";
+      #   };
+      #   original_video_files = {
+      #     bucket_name = "videos-nanall-ac";
+      #     prefix = "original-video-files/";
+      #   };
+      #   streaming_playlists= {
+      #     bucket_name = "videos-nanall-ac";
+      #     prefix = "streaming-playlists/";
+      #   };
+      #   credentials = {
+      #     access_key_id = "0006150d456e59a000000000c";
+      #     secret_access_key = "K000W76goWdvAWSAXIozC0iNuSr5ab8";
+      #   };
+      # };
     };
     secrets.secretsFile = config.sops.secrets."peertube/secrets/secretsFile".path;
     redis.createLocally = true;

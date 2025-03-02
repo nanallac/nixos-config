@@ -18,10 +18,10 @@ in
     port = 8085;
     settings = {
       server_url = "https://${url}";
-      dns_config = {
+      dns = {
         override_local_dns = true;
-        nameservers = [ "192.168.1.1" ];
-        domains = [ "nanall.ac" ];
+        nameservers.global = [ "192.168.1.1" ];
+        search_domains = [ "nanall.ac" ];
         magic_dns = false;
       };
       ip_prefixes = [

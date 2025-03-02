@@ -8,6 +8,7 @@ in
 {
   users.users.kanidm.extraGroups = [ "acme" ];
   services.kanidm = {
+    package = pkgs.kanidm_1_4;
     enableServer = true;
     enableClient = true;
     serverSettings = {
@@ -46,11 +47,8 @@ in
 
   services.restic.backups.idm-nanall-ac = {
     initialize = true;
-    # passwordFile = "/run/secrets/idm/restic";
     passwordFile = config.sops.secrets."idm/restic".path;
-    # repositoryFile = "/run/secrets/idm/backblaze/repo";
     repositoryFile = config.sops.secrets."idm/backblaze/repo".path;
-    # environmentFile = "/run/secrets/idm/backblaze/env";
     environmentFile = config.sops.secrets."idm/backblaze/env".path;
     paths = [
       "/var/lib/kanidm"

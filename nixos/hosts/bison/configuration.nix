@@ -11,6 +11,7 @@
     ./disk-config.nix
     ../../common
     ./sunshine.nix
+    ./ai.nix
   ];
 
   programs.steam = {
@@ -20,12 +21,34 @@
     gamescopeSession.enable = true;
   };
 
+  programs.gamemode.enable = true;
+
+  systemd.user.services.steam = {
+    enable = true;
+    description = "Open steam in the background at boot";
+    requires = [ "networking.target" "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.steam}/bin/steam -nochatui -nofriendsui -silent %U";
+
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
+  };
+
+  networking = {
+    hostName = "bison";
+    domain = "nanall.ac";
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 80 443 ];
+    };
+  };
+
   # Home Manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users.josh = import ./../koala/home.nix;
 
-  networking.hostName = "bison";
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -34,7 +57,7 @@
   boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.efi.canTouchEfiVariables = true;
 
-   # Select internationalisation properties.
+  # Select internationalisation properties.
   i18n.defaultLocale = "en_AU.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -52,22 +75,36 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    excludePackages = [ pkgs.xterm ];
+    # excludePackages = [ pkgs.xterm ];
+    videoDrivers = [ "amdgpu" ];
 
     # Enable the GNOME Desktop Environment.
-    displayManager.gdm.enable = true;
+    displayManager.gdm = {
+      enable = true;
+      # wayland = true;
+    };
     desktopManager.gnome.enable = true;
   };
+
+  services.xrdp = {
+    enable = true;
+    defaultWindowManager = "${pkgs.gnome-remote-desktop}/bin/gnome-remote-desktop";
+    openFirewall = true;
+  };
+
+
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
     gnome-tour
     gnome-usage
     gnome-text-editor
-    gnome-connections
     baobab
     evince
-  ]) ++ (with pkgs.gnome; [
     cheese
     gnome-music
     epiphany
@@ -84,7 +121,6 @@
     simple-scan
     gnome-logs
     eog
-    # gnome-disk-utility
   ]);
 
   programs.dconf.enable = true;
@@ -92,10 +128,25 @@
   programs.adb.enable = true;
 
   environment.systemPackages = with pkgs; [
-    gnome.gnome-tweaks
-    gnome3.gnome-session
-    gnome.gnome-remote-desktop
+    gnome-tweaks
+    gnome-session
+    lact
   ];
+
+  systemd.packages = with pkgs; [ lact ];
+  systemd.services.lactd.wantedBy = [ "multi-user.target" ];
+
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.login1.suspend" ||
+            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.hibernate" ||
+            action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+        {
+            return polkit.Result.NO;
+        }
+    });
+  '';
 
   # Configure keymap in X11
   services.xserver = {
@@ -125,12 +176,14 @@
   programs.zsh.enable = true;
 
   # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = false;
+  services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "josh";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+2
+
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

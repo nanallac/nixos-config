@@ -12,6 +12,9 @@
     ./freshrss.nix
     ./vector.nix
     ./reverse-proxy.nix
+    ./mqtt.nix
+    ./nextcloud.nix
+    # ./frigate.nix
     # ./forgejo.nix
   ];
 
@@ -33,9 +36,8 @@
     directories = [
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
-    ];
-    files = [
-      "/etc/machine-id"
+      "/var/lib/tailscale"
+      "/var/lib/postgresql"
     ];
   };
 
@@ -52,14 +54,6 @@
     # ACME certificates
     "d /keep/var/lib/acme 0750 acme acme -"
     "L /var/lib/acme - - - - /keep/var/lib/acme"
-
-    # Forgejo
-    # "d /keep/var/lib/forgejo 0700 forgejo forgejo -"
-    # "L /var/lib/forgejo - - - - /keep/var/lib/forgejo"
-
-    # Postgres
-    # "d /keep/var/lib/postgres 0700 postgres postgres -"
-    # "L /var/lib/postgres - - - - /keep/var/lib/postgres"
   ];
 
   # NGINX

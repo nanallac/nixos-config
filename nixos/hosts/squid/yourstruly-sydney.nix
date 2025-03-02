@@ -1,4 +1,4 @@
-{ inputs, config, ... }:
+{ inputs, config, self, ... }:
 
 let
   domain = "yourstruly.sydney";
@@ -33,33 +33,9 @@ in
       useACMEHost = "yourstruly.sydney";
       locations = {
         "/" = {
-          root = inputs.yourstruly-sydney;
-        };
-      };
-    };
-
-    "metrics.${url}" = {
-      forceSSL = true;
-      useACMEHost = "yourstruly.sydney";
-      locations = {
-        "/" = {
-          proxyPass = "http://${config.services.plausible.server.listenAddress}:${toString config.services.plausible.server.port}";
+          root = "${self.packages.x86_64-linux.yourstruly-sydney}/srv/yourstruly.sydney/";
         };
       };
     };
   };
-
-  # services.plausible = {
-  #   enable = true;
-  #   adminUser = {
-  #     activate = true;
-  #     email = "sydbross@gmail.com";
-  #     passwordFile = config.sops.secrets."plausible/admin_password".path;
-  #   };
-  #   server = {
-  #     baseUrl = "https://metrics.${url}/";
-  #     secretKeybaseFile = config.sops.secrets."plausible/keybase".path;
-  #     disableRegistration = "invite_only";
-  #   };
-  # };
 }
