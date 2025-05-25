@@ -35,8 +35,6 @@
       url = "github:nanallac/tic-tac-toe";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    erosanix.url = "github:emmanuelrosa/erosanix";
   };
 
   outputs = { self, nixpkgs, deploy-rs, tic-tac-toe, ... }@inputs: {
