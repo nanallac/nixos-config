@@ -14,6 +14,8 @@
     ./reverse-proxy.nix
     ./mqtt.nix
     ./nextcloud.nix
+    ./music-assistant.nix
+    ./tic-tac-toe.nix
     # ./frigate.nix
     # ./forgejo.nix
   ];

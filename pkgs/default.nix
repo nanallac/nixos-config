@@ -9,4 +9,5 @@ in
 {
   yourstruly-sydney = pkgs.callPackage ./by-name/yo/yourstruly-sydney { };
   # nunito = pkgs.callPackage ./by-name/nu/nunito { };
+  nistune = pkgs.callPackage ./by-name/ni/nistune { };
 }

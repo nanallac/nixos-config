@@ -30,9 +30,16 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    tic-tac-toe = {
+      url = "github:nanallac/tic-tac-toe";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    erosanix.url = "github:emmanuelrosa/erosanix";
   };
 
-  outputs = { self, nixpkgs, deploy-rs, ... }@inputs: {
+  outputs = { self, nixpkgs, deploy-rs, tic-tac-toe, ... }@inputs: {
 
     packages.x86_64-linux = import ./pkgs {
       inherit self inputs;
