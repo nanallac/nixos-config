@@ -12,7 +12,6 @@ in
       "deezer"
       "jellyfin"
       "radiobrowser"
-      "slimproto"
       "snapcast"
       "spotify"
       "spotify_connect"
@@ -38,7 +37,7 @@ in
   # required for mdns discovery
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     publish = {
       enable = true;
       addresses = true;

@@ -32,6 +32,9 @@
     remmina
     moonlight-qt
     # orca-slicer
+    librewolf
+    waypipe
+    scrcpy
 
     gnome-remote-desktop
 
@@ -47,7 +50,7 @@
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs29-gtk3;
+    package = pkgs.emacs;
   };
 
   programs.zsh = {
@@ -57,7 +60,7 @@
     autosuggestion.enable = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
-    initExtra = ''
+    initContent = ''
       eval "$(direnv hook zsh)"
     '';
   };
@@ -83,10 +86,6 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
-  };
-
-  programs.firefox = {
-    enable = true;
   };
 
   programs.mpv = {

@@ -8,7 +8,7 @@ in
 {
   users.users.kanidm.extraGroups = [ "acme" ];
   services.kanidm = {
-    package = pkgs.kanidm_1_4;
+    package = pkgs.kanidm_1_5;
     enableServer = true;
     enableClient = true;
     serverSettings = {

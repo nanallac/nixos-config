@@ -16,7 +16,7 @@
     ./nextcloud.nix
     ./music-assistant.nix
     ./tic-tac-toe.nix
-    # ./frigate.nix
+    ./frigate.nix
     # ./forgejo.nix
   ];
 

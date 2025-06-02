@@ -8,7 +8,7 @@
     ./kanidm.nix
     # ./vouch.nix
     ./josh.callanan.contact.nix
-    ./yourstruly-sydney.nix
+    # ./yourstruly-sydney.nix
     ./peertube.nix
   ];
 
@@ -61,6 +61,7 @@
       enable = true;
       allowedTCPPorts = [ 80 443 ];
     };
+    nameservers = [ "8.8.8.8" "9.9.9.9" ];
   };
 
   zramSwap.enable = true;

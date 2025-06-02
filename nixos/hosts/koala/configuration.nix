@@ -118,15 +118,15 @@
 
   services.gnome.gnome-remote-desktop.enable = true;
 
-  services.fprintd = {
-    enable = true;
+  # services.fprintd = {
+  #   enable = true;
 
-    package = pkgs.fprintd-tod;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-vfs0090;
-    };
-  };
+  #   package = pkgs.fprintd-tod;
+  #   tod = {
+  #     enable = true;
+  #     driver = pkgs.libfprint-2-tod1-vfs0090;
+  #   };
+  # };
 
   # Configure keymap in X11
   services.xserver = {
@@ -141,7 +141,7 @@
 
   # Enable sound with pipewire.
   # sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

@@ -3,7 +3,7 @@
 {
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud29;
+    package = pkgs.nextcloud30;
     hostName = "cloud.nanall.ac";
 
     maxUploadSize = "16G";
@@ -92,7 +92,7 @@
   services.samba.enable = true;
   services.postfix.enable = true;
   environment.systemPackages = [
-    pkgs.nodejs_18 # for Recognize
+    pkgs.nodejs_24 # for Recognize
     pkgs.ffmpeg
     pkgs.sudo
     pkgs.restic # for backups

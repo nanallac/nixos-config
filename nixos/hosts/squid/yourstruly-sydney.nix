@@ -27,6 +27,8 @@ in
     };
   };
 
+  systemd.services."acme-yourstruly.sydney.service".environment.HURRICANE_PROPAGATION_TIMEOUT = "600";
+
   services.nginx.virtualHosts = {
     ${url} = {
       forceSSL = true;

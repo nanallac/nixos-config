@@ -8,14 +8,15 @@ in
   environment.systemPackages = [
     pkgs.gasket
   ];
+
   services.frigate = {
     enable = true;
     hostname = url;
     settings = {
-#       mqtt = {
-#         enabled = true;
-#         host = "192.168.1.186";
-#       };
+      #       mqtt = {
+      #         enabled = true;
+      #         host = "192.168.1.186";
+      #       };
       objects.track = [ "person" "cat" "dog" ];
       record.enabled = false;
       snapshots.enabled = true;
@@ -44,6 +45,22 @@ in
         #   driveway.coordinates = "988,345,616,326,300,345,0,395,0,555,339,524,731,530,1273,584,1269,385";
         # };
       };
+    };
+  };
+
+  sops.secrets.porkbun = {
+    owner = "acme";
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "josh@callanan.contact";
+
+    certs."nanall.ac" = {
+      domain = "nanall.ac";
+      extraDomainNames = [ "*.nanall.ac" ];
+      dnsProvider = "porkbun";
+      credentialsFile = config.sops.secrets.porkbun.path;
     };
   };
 }
