@@ -113,7 +113,7 @@
               users = [ "josh" ];
             };
 
-            "squid" = mkHost {
+            "squid" = mkHostv2 {
               hostname = "squid";
               system = "x86_64-linux";
             };

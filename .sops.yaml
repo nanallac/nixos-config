@@ -3,6 +3,7 @@ keys:
   - &host_tapir age15gfzu8pfpj7erq5jxp3mhvsvaa6fu9fpsd0yzg76lk4z0z684s9s5yslpp
   - &host_finch age1cw5w70fukqxy0t8h57tezc2pdqdfq2sdrk9y60tqvqt8kzcecy8qcnlf3w
   - &host_moose age193psqxcj9dau3jq3mnqsjrfpj6ejkl6rhjen04tmkyjf6gpwtajqn050aq
+  - &host_squid age15zf6wh9rmqwe6v95u9sy0azcec5t8ruqc93fds4r90rqtr649crqtg3238
 creation_rules:
   - path_regex: secrets/secrets.yaml$
     key_groups:
@@ -11,3 +12,4 @@ creation_rules:
       - *host_tapir
       - *host_finch
       - *host_moose
+      - *host_squid
