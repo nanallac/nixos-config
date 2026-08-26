@@ -3,6 +3,10 @@
 let ifGroupExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
+  imports = [
+    inputs.nix-maid.nixosModules.default
+  ];
+
   nixpkgs.config.permittedInsecurePackages = [
     "librewolf-151.0.2-1"
     "librewolf-unwrapped-151.0.2-1"

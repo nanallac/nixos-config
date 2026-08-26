@@ -9,7 +9,6 @@
 
     ./hardware-configuration.nix
     ./disk-config.nix
-    ../../common
     ./sunshine.nix
     ./ai.nix
   ];

@@ -107,7 +107,7 @@
               system = "x86_64-linux";
             };
 
-            "bison" = mkHost {
+            "bison" = mkHostv2 {
               hostname = "bison";
               system = "x86_64-linux";
               users = [ "josh" ];

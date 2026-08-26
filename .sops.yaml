@@ -4,6 +4,8 @@ keys:
   - &host_finch age1cw5w70fukqxy0t8h57tezc2pdqdfq2sdrk9y60tqvqt8kzcecy8qcnlf3w
   - &host_moose age193psqxcj9dau3jq3mnqsjrfpj6ejkl6rhjen04tmkyjf6gpwtajqn050aq
   - &host_squid age15zf6wh9rmqwe6v95u9sy0azcec5t8ruqc93fds4r90rqtr649crqtg3238
+  - &host_bison age1he5uuwlsxcr8kc890uzmu6sjpvj0v0n5u2plr27w9z4t80u45arqfqra8f
+
 creation_rules:
   - path_regex: secrets/secrets.yaml$
     key_groups:
@@ -13,3 +15,4 @@ creation_rules:
       - *host_finch
       - *host_moose
       - *host_squid
+      - *host_bison
