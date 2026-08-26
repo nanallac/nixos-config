@@ -7,7 +7,6 @@
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
     inputs.home-manager.nixosModules.home-manager
-    ../../common
     ./jellyfin.nix
     ./calibre-web.nix
     ./freshrss.nix

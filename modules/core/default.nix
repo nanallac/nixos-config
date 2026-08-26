@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   # Nix
@@ -80,6 +80,32 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
   ];
+
+  # fail2ban
+  services.fail2ban = {
+    enable = true;
+    maxretry = 5;
+    bantime = "10m";
+    ignoreIP = [
+      "127.0.0.0/8"
+      "100.64.0.0/16"
+      "192.168.0.0/16"
+    ];
+  };
+
+  # Tailscale
+  services.tailscale.enable = true;
+  networking.firewall = {
+    checkReversePath = "loose";
+    allowedUDPPorts = [ config.services.tailscale.port ];
+    trustedInterfaces = [ "tailscale0" ];
+  };
+
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+
+  # See if this helps prevent nixos-rebuild failures.
+  systemd.services.tailscaled.after = [ "NetworkManager-wait-online.service" ];
+
 
   # SOPS
   sops.defaultSopsFile = ../../secrets/secrets.yaml;

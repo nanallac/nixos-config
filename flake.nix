@@ -118,7 +118,7 @@
               system = "x86_64-linux";
             };
 
-            "moose" = mkHost {
+            "moose" = mkHostv2 {
               hostname = "moose";
               system = "x86_64-linux";
             };

@@ -144,19 +144,19 @@
               logbias = "throughput";
             };
           };
-          # "nextcloud-data" = {
-          #   type = "zfs_fs";
-          #   mountpoint = "/mnt/storage0/nextcloud-data";
-          #   options = {
-          #     compression = "lz4";
-          #     atime = "off";
-          #     xattr = "sa";
-          #     recordsize = "128K";
-          #     mountpoint = "legacy";
-          #     sync = "standard";
-          #     dedup = "off";
-          #   };
-          # };
+          "nextcloud-data" = {
+            type = "zfs_fs";
+            mountpoint = "/mnt/storage0/nextcloud-data";
+            options = {
+              compression = "lz4";
+              atime = "off";
+              xattr = "sa";
+              recordsize = "128K";
+              mountpoint = "legacy";
+              sync = "standard";
+              dedup = "off";
+            };
+          };
         };
       };
     };
