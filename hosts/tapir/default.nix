@@ -27,6 +27,8 @@
     displayManager.plasma-login-manager.enable = true;
   };
 
+  programs.kdeconnect.enable = true;
+
   # KDE Wallet unlock
   boot.initrd.systemd.enable = true;
   systemd.services.plasmalogin.serviceConfig.KeyringMode = "inherit";
