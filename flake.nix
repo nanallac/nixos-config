@@ -96,7 +96,7 @@
             };
         in
           {
-            "koala" = mkHost {
+            "koala" = mkHostv2 {
               hostname = "koala";
               system = "x86_64-linux";
               users = [ "josh" ];

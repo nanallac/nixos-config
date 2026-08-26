@@ -4,7 +4,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      ../../common
       inputs.home-manager.nixosModules.home-manager
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
       inputs.dms-plugin-registry.nixosModules.default
