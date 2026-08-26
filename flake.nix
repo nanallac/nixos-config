@@ -65,24 +65,6 @@
       nixosConfigurations =
         let
           mkHost = { hostname, system, users ? [] }:
-            let
-              userModules =
-              # Include all users that are in the systems attribute set
-                (builtins.filter (path: builtins.pathExists path)
-                (map (user: ./users/${user}) users))
-              # Add the deploy user by default
-              ++ [ ./users/deploy ]
-              # Not sure if I want to keep this one
-              ++ [ nix-maid.nixosModules.default ];
-            in
-              nixpkgs.lib.nixosSystem {
-                inherit system;
-                specialArgs = { inherit inputs self; };
-                modules = [
-                  ./nixos/hosts/${hostname}/configuration.nix
-                ] ++ userModules;
-              };
-          mkHostv2 = { hostname, system, users ? [] }:
             nixpkgs.lib.nixosSystem {
               inherit system;
               specialArgs = { inherit inputs self system; };
@@ -96,34 +78,34 @@
             };
         in
           {
-            "koala" = mkHostv2 {
+            "koala" = mkHost {
               hostname = "koala";
               system = "x86_64-linux";
               users = [ "josh" ];
             };
 
-            "tapir" = mkHostv2 {
+            "tapir" = mkHost {
               hostname = "tapir";
               system = "x86_64-linux";
             };
 
-            "bison" = mkHostv2 {
+            "bison" = mkHost {
               hostname = "bison";
               system = "x86_64-linux";
               users = [ "josh" ];
             };
 
-            "squid" = mkHostv2 {
+            "squid" = mkHost {
               hostname = "squid";
               system = "x86_64-linux";
             };
 
-            "moose" = mkHostv2 {
+            "moose" = mkHost {
               hostname = "moose";
               system = "x86_64-linux";
             };
 
-            "finch" = mkHostv2 {
+            "finch" = mkHost {
               hostname = "finch";
               system = "aarch64-linux";
             };
