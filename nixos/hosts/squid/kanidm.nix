@@ -8,20 +8,25 @@ in
 {
   users.users.kanidm.extraGroups = [ "acme" ];
   services.kanidm = {
-    package = pkgs.kanidm_1_5;
-    enableServer = true;
-    enableClient = true;
-    serverSettings = {
+    package = pkgs.kanidm_1_10;
+    server.enable = true;
+    server.settings = {
       domain = "${url}";
       origin = "https://${url}";
       bindaddress = "[::]:8443";
-      trust_x_forward_for = true;
       # tls_key = "${config.security.acme.certs."nanall.ac".directory}/key.pem";
       # tls_chain = "${config.security.acme.certs."nanall.ac".directory}/fullchain.pem";
       tls_key = "/var/lib/kanidm/certs/key.pem";
       tls_chain = "/var/lib/kanidm/certs/fullchain.pem";
+
+      online_backup = {
+        path = "/var/lib/kanidm/backups/";
+        schedule = "00 22 * * *";
+        versions = 7;
+      };
     };
-    clientSettings.uri = "https://${url}";
+    client.enable = true;
+    client.settings.uri = "https://${url}";
   };
 
   services.nginx.virtualHosts."${url}" = {

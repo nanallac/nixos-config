@@ -26,6 +26,7 @@ in
       useACMEHost = domain;
       locations."/" = {
         proxyPass = "https://192.168.1.110:8006";
+        proxyWebsockets = true;
       };
     };
     "otter.${domain}" = {
@@ -33,13 +34,15 @@ in
       useACMEHost = domain;
       locations."/" = {
         proxyPass = "https://192.168.1.120:8006";
+        proxyWebsockets = true;
       };
     };
     "3d.${domain}" = {
       forceSSL = true;
       useACMEHost = domain;
       locations."/" = {
-        proxyPass = "http://192.168.1.61";
+        proxyPass = "http://192.168.1.178";
+        proxyWebsockets = true;
       };
     };
     "sprinklers.${domain}" = {

@@ -2,7 +2,7 @@
 
 {
   services.jellyfin.enable = true;
-  users.users.jellyfin.extraGroups = [ "video" "render" ];
+  users.users.jellyfin.extraGroups = [ "video" "render" "media"];
 
   services.nginx.virtualHosts."media.nanall.ac" = {
     forceSSL = true;

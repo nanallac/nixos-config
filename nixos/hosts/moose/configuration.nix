@@ -6,6 +6,7 @@
     ./disk-config.nix
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
+    inputs.home-manager.nixosModules.home-manager
     ../../common
     ./jellyfin.nix
     ./calibre-web.nix
@@ -16,8 +17,16 @@
     ./nextcloud.nix
     ./music-assistant.nix
     ./tic-tac-toe.nix
-    ./frigate.nix
     # ./forgejo.nix
+    ./scrutiny.nix
+    ./go2rtc.nix
+    ./ntfy-sh.nix
+    ./searx.nix
+    ./ipcam-timelapse.nix
+    ./ipcam.nix
+    ./pinchflat.nix
+    ./peertube-runner.nix
+    ./arr.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -51,6 +60,8 @@
     # SSH
     "d /keep/ssh 0755 root root -"
   ];
+
+  systemd.enableEmergencyMode = false;
 
   # NGINX
   services.nginx = {
@@ -87,8 +98,13 @@
 
   # ACME certificates
   # Secrets
-  sops.secrets.porkbun = {
-    owner = "acme";
+  sops.secrets = {
+    porkbun_secret_api_key_file = {
+      owner = "acme";
+    };
+    porkbun_api_key_file = {
+      owner = "acme";
+    };
   };
 
   security.acme = {
@@ -97,9 +113,12 @@
 
     certs."nanall.ac" = {
       domain = "nanall.ac";
-      extraDomainNames = [ "*.nanall.ac" ];
+      extraDomainNames = [ "*.nanall.ac" "*.media.nanall.ac"];
       dnsProvider = "porkbun";
-      credentialsFile = config.sops.secrets.porkbun.path;
+      credentialFiles = {
+        "PORKBUN_SECRET_API_KEY_FILE" = config.sops.secrets.porkbun_secret_api_key_file.path;
+        "PORKBUN_API_KEY_FILE" = config.sops.secrets.porkbun_api_key_file.path;
+      };
     };
   };
 

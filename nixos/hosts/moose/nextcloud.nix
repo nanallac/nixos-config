@@ -3,7 +3,7 @@
 {
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud30;
+    package = pkgs.nextcloud33;
     hostName = "cloud.nanall.ac";
 
     maxUploadSize = "16G";
@@ -49,6 +49,7 @@
         "OC\\Preview\\Imaginary"
       ];
       preview_imaginary_url = "http://${builtins.toString config.services.imaginary.address}:${builtins.toString config.services.imaginary.port}";
+      preview_ffmpeg_path = "${pkgs.ffmpeg-headless}/bin/ffmpeg";
       redis = {
         host = "/run/redis-nextcloud/redis.sock";
         port = 0;
@@ -63,6 +64,12 @@
       log_type = "syslog";
       loglevel = 0;
       notify_push.enable = true;
+
+      # Run the exiftool bundled with Memories via system perl
+      # instead of the prebuilt binary that can't execute on NixOS
+      "memories.exiftool" = "${pkgs.exiftool}/bin/exiftool";
+      "memories.vod.ffmpeg"  = "${pkgs.ffmpeg-headless}/bin/ffmpeg";
+      "memories.vod.ffprobe" = "${pkgs.ffmpeg-headless}/bin/ffprobe";
     };
   };
 
@@ -96,6 +103,7 @@
     pkgs.ffmpeg
     pkgs.sudo
     pkgs.restic # for backups
+    pkgs.perl
   ];
 
   systemd.services = {
@@ -138,6 +146,14 @@
     };
   };
 
+    # perl for the background indexer...
+  systemd.services.nextcloud-cron.path = [ pkgs.perl ];
+  # ...for the web UI (admin status check, on-upload indexing)...
+  systemd.services.phpfpm-nextcloud.path = [ pkgs.perl ];
+  # ...and for interactive `nextcloud-occ` runs as root
+
+
+
   # Impermanence
 
 
@@ -157,6 +173,24 @@
       }
     ];
   };
+
+  # mount HDD ZFS dataset to the standard Nextcloud Data directory
+  fileSystems."/keep/var/lib/nextcloud/data" = {
+    device = "storage0/nextcloud-data";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
+
+  # we don't want to keep preview images on the HDD so bind mount to an SSD folder
+  fileSystems."/keep/var/lib/nextcloud/data/appdata_ocli5g3yaxxn/preview" = {
+    device = "/keep/var/lib/nextcloud/preview";
+    fsType = "none";
+    options = [ "bind" ];
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /keep/var/lib/nextcloud/preview 0750 nextcloud nextcloud - -"
+  ];
 
   # Backups
 
@@ -183,6 +217,10 @@
     environmentFile = config.sops.secrets."nextcloud/backblaze/env".path;
     paths = [
       "/keep/var/lib/nextcloud"
+    ];
+    exclude = [
+      # bind mounted path
+      "/keep/var/lib/nextcloud/data/appdata_ocli5g3yaxxn/preview"
     ];
     timerConfig = {
       OnCalendar = "02:00";

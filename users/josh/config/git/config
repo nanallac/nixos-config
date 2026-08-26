@@ -1,0 +1,16 @@
+[gpg]
+	format = "openpgp"
+
+[gpg "openpgp"]
+	program = "/nix/store/zf12chbmsxmkidrgafqwf8pw4ldlpdch-gnupg-2.4.7/bin/gpg"
+
+[init]
+	defaultBranch = "main"
+
+[url "https://github.com/"]
+	insteadOf = "gh:"
+	insteadOf = "github:"
+
+[user]
+	email = "josh@callanan.contact"
+	name = "Josh Callanan"

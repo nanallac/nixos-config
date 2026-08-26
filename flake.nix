@@ -2,7 +2,6 @@
   description = "My NixOS infra.";
 
   inputs = {
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     sops-nix = {
@@ -15,6 +14,10 @@
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-maid = {
+      url = "github:viperML/nix-maid";
     };
 
     disko = {
@@ -31,145 +34,115 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     tic-tac-toe = {
       url = "github:nanallac/tic-tac-toe";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hearth = {
+      url = "git+file:/home/josh/dev/hearth";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, deploy-rs, tic-tac-toe, ... }@inputs: {
-
-    packages.x86_64-linux = import ./pkgs {
-      inherit self inputs;
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    };
-
-    # nixosModules.x86_64-linux = import ./nixos/modules {
-    #   inherit self inputs;
-    #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    # };
-
-    nixosConfigurations = {
-      "koala" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/koala/configuration.nix
-          # ./nixos/modules
-        ];
-      };
-
-      "bison" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/bison/configuration.nix
-        ];
-      };
-
-      "squid" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs self; };
-        modules = [
-          ./nixos/hosts/squid/configuration.nix
-        ];
-      };
-
-      "moose" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/moose/configuration.nix
-        ];
-      };
-
-      # "panda" = nixpkgs.lib.nixosSystem {
-      #   system = "x86_64-linux";
-      #   specialArgs = { inherit inputs; };
-      #   modules = [
-      #     ./nixos/hosts/panda/configuration.nix
-      #   ];
-      # };
-
-      # "skunk" = nixpkgs.lib.nixosSystem {
-      #   system = "aarch64-linux";
-      #   specialArgs = { inherit inputs; };
-      #   modules = [
-      #     ./nixos/hosts/skunk/configuration.nix
-      #   ];
-      # };
-
-      "finch" = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/finch/configuration.nix
-        ];
-      };
-    };
-
-    images = {
-      "finch" = (self.nixosConfigurations."finch".extendModules {
-        modules = [
-          "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+  outputs = { self, nixpkgs, sops-nix, nix-maid, deploy-rs, tic-tac-toe, hearth, ... }@inputs:
+    {
+      nixosConfigurations =
+        let
+          mkHost = { hostname, system, users ? [] }:
+            let
+              userModules =
+              # Include all users that are in the systems attribute set
+                (builtins.filter (path: builtins.pathExists path)
+                (map (user: ./users/${user}) users))
+              # Add the deploy user by default
+              ++ [ ./users/deploy ]
+              # Not sure if I want to keep this one
+              ++ [ nix-maid.nixosModules.default ];
+            in
+              nixpkgs.lib.nixosSystem {
+                inherit system;
+                specialArgs = { inherit inputs self; };
+                modules = [
+                  ./nixos/hosts/${hostname}/configuration.nix
+                ] ++ userModules;
+              };
+          mkHostv2 = { hostname, system, users ? [] }:
+            nixpkgs.lib.nixosSystem {
+              inherit system;
+              specialArgs = { inherit inputs self system; };
+              modules = [
+                inputs.disko.nixosModules.disko
+                inputs.sops-nix.nixosModules.sops
+                ./modules/core
+                ./hosts/${hostname}
+                { networking.hostName = hostname; }
+              ] ++ map (user: ./users/${user}) users;
+            };
+        in
           {
-            disabledModules = [ "profiles/base.nix" ];
-          }
-        ];
-      }).config.system.build.sdImage;
-    };
+            "koala" = mkHost {
+              hostname = "koala";
+              system = "x86_64-linux";
+              users = [ "josh" ];
+            };
 
-    deploy = {
-      sshUser = "deploy";
-      sshOpts = [ "-p" "22" ];
-      user = "root";
+            "tapir" = mkHostv2 {
+              hostname = "tapir";
+              system = "x86_64-linux";
+            };
 
-      autoRollback = false;
-      magicRollback = false;
+            "bison" = mkHost {
+              hostname = "bison";
+              system = "x86_64-linux";
+              users = [ "josh" ];
+            };
 
-      nodes = {
-        "koala" = {
-          hostname = "127.0.0.1";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."koala";
+            "squid" = mkHost {
+              hostname = "squid";
+              system = "x86_64-linux";
+            };
+
+            "moose" = mkHost {
+              hostname = "moose";
+              system = "x86_64-linux";
+            };
+
+            "finch" = mkHostv2 {
+              hostname = "finch";
+              system = "aarch64-linux";
+            };
           };
-        };
 
-        "bison" = {
-          hostname = "192.168.1.233";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."bison";
-          };
-        };
+      images = {
+        "finch" = (self.nixosConfigurations."finch".extendModules {
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            {
+              disabledModules = [ "profiles/base.nix" ];
+            }
+          ];
+        }).config.system.build.sdImage;
+      };
 
-        "squid" = {
-          hostname = "175.45.180.229";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."squid";
-          };
-        };
-
-        # "panda" = {
-        #   hostname = "192.168.1.244";
-        #   profiles.system = {
-        #     path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."panda";
-        #   };
-        # };
-
-        "moose" = {
-          hostname = "192.168.1.40";
-          profiles.system = {
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations."moose";
-          };
-        };
-
-        "finch" = {
-          hostname = "192.168.1.171";
-          profiles.system = {
-            path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations."finch";
-          };
-        };
+      packages.x86_64-linux = import ./pkgs {
+        inherit self inputs;
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
       };
     };
-  };
 }

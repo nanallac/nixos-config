@@ -1,0 +1,88 @@
+{ inputs, pkgs, lib, ... }:
+
+{
+  # Nix
+  nix = {
+    # channels not required for flake only.
+    channel.enable = false;
+    # `nix run nixpkgs#...` and `<nixpkgs>` resolve to flake's nixpkgs.
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = [ "nixpkgs=flake:nixpkgs" ];
+
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      # auto-optimized-store = true;
+      trusted-users = [ "@wheel" ];
+      warn-dirty = false;
+      keep-outputs = true;
+      keep-derivations = true;
+    };
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  documentation.nixos.enable = false;
+
+  # Baseline Packages
+  environment = {
+    defaultPackages = lib.mkForce [ ];
+    systemPackages = [
+      pkgs.screen
+      pkgs.htop
+    ];
+  };
+
+  # Locale & Time
+  time.timeZone = "Australia/Perth";
+
+  i18n = {
+    defaultLocale = "en_AU.UTF-8";
+
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_AU.UTF-8";
+      LC_IDENTIFICATION = "en_AU.UTF-8";
+      LC_MEASUREMENT = "en_AU.UTF-8";
+      LC_MONETARY = "en_AU.UTF-8";
+      LC_NAME = "en_AU.UTF-8";
+      LC_NUMERIC = "en_AU.UTF-8";
+      LC_PAPER = "en_AU.UTF-8";
+      LC_TELEPHONE = "en_AU.UTF-8";
+      LC_TIME = "en_AU.UTF-8";
+    };
+  };
+
+  console.keyMap = "us";
+
+  # Networking
+  networking = {
+    domain = "nanall.ac";
+    firewall.enable = true;
+  };
+
+  # Users
+  users.mutableUsers = false;
+
+  # SSH
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
+
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
+  ];
+
+  # SOPS
+  sops.defaultSopsFile = ../../secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+}

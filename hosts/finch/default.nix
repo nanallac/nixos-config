@@ -3,24 +3,27 @@
 {
   imports = [
     "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
-    ../../common
-    # ./wyoming.satellite.nix
+    ../../modules/wifi
   ];
 
   services.squeezelite = {
     enable = true;
     # discovery was not occuring automagically
     # force usb speaker output
-    extraArguments = ''
+    extraArgs = ''
       -s 192.168.1.40 \
       -o "sysdefault:CARD=Phone"
     '';
   };
 
+  systemd.tmpfiles.rules = [
+    "d /var/lib/squeezelite 0755 - - - -"
+  ];
 
   services.actkbd.enable = true;
   services.actkbd.bindings = [
     # Mute
+
     { keys = [ 113 ]; events = [ "key" ];
       command = "${pkgs.alsa-utils}/bin/amixer -q set Master toggle";
     }
@@ -44,7 +47,6 @@
   hardware.firmware = [ pkgs.raspberrypiWirelessFirmware ];
 
   environment.systemPackages = [
-    pkgs.neofetch
     pkgs.htop
     pkgs.alsa-utils
     pkgs.usbutils
@@ -55,14 +57,6 @@
 
   networking = {
     hostName = "finch";
-    interfaces."wlan0".useDHCP = true;
-    wireless = {
-      interfaces = [ "wlan0" ];
-      enable = true;
-      networks = {
-        Zebra.psk = "2304091040";
-      };
-    };
   };
 
   fileSystems."/" = {

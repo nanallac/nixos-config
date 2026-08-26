@@ -8,13 +8,17 @@ in
   services.music-assistant = {
     enable = true;
     providers = [
+      "apple_music"
       "chromecast"
       "deezer"
+      "dlna"
       "jellyfin"
       "radiobrowser"
       "snapcast"
+      "sendspin"
       "spotify"
       "spotify_connect"
+      "squeezelite"
     ];
   };
 
@@ -45,20 +49,11 @@ in
     };
   };
 
-  services.snapserver = {
-    enable = true;
-    openFirewall = true;
-    streams.default = {
-      type = "pipe";
-      location = "/run/snapserver/pipewire";
-    };
-  };
-
   environment.persistence."/keep" = {
     directories = [
       {
         # no user or group here due to the service config
-        directory = "/var/lib/music-assistant";
+        directory = "/var/lib/private/music-assistant";
         mode = "0700";
       }
     ];

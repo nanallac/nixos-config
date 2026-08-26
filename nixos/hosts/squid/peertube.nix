@@ -69,6 +69,13 @@ in
     configureNginx = true;
   };
 
+  systemd.services.peertube = {
+    path = [ pkgs.pnpm ];
+    environment = {
+      NODE_OPTIONS = "--dns-result-order=ipv4first";
+    };
+  };
+
   services.nginx.virtualHosts."${url}" = {
     useACMEHost = config.networking.domain;
     forceSSL = true;

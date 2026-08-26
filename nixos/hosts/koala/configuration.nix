@@ -7,30 +7,89 @@
       ../../common
       inputs.home-manager.nixosModules.home-manager
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+      inputs.dms-plugin-registry.nixosModules.default
     ];
 
-  # Home Manager
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.josh = import ./home.nix;
+  services.udisks2.enable = true;
 
-  # Virtualisation
-  virtualisation = {
-    waydroid.enable = true;
-    docker.enable = true;
+  programs.niri.enable = config.services.xserver.enable;
+
+  services.displayManager.dms-greeter = {
+    enable = config.services.xserver.enable;
+    compositor.name = "niri";
+    package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+    configHome = "/home/josh";
   };
 
-  services.xrdp = {
-    enable = true;
-    defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-    openFirewall = true;
+  programs.dms-shell = {
+    enable = config.services.xserver.enable;
+
+    package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+
+    plugins = {
+      dankBatteryAlerts.enable = true;
+      # USBManager = {
+      #   enable = true;
+      #   src = inputs.dms-plugin-registry.packages.${pkgs.system}.USBManager;
+      # };
+    };
+
+    systemd = {
+      enable = true;             # Systemd service for auto-start
+      restartIfChanged = true;   # Auto-restart dms.service when dms-shell changes
+    };
+
+    # Core features
+    enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+    enableVPN = true;                  # VPN management widget
+    enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+    enableAudioWavelength = true;      # Audio visualizer (cava)
+    enableCalendarEvents = true;       # Calendar integration (khal)
   };
 
-  networking.firewall = {
-    allowedTCPPorts = [ 3389 ];
-    allowedUDPPorts = [ 3389 ];
-  };
+  environment.systemPackages =
+    (if config.services.xserver.enable then builtins.attrValues {
+      inherit (pkgs)
+        alacritty
+        fuzzel
+        screen
+        seahorse
+      ;
+    } else []);
 
+  boot = {
+    plymouth =
+      let theme = "lone"; in {
+            # We only care about how the boot process looks on graphical systems
+            enable = config.services.xserver.enable;
+            theme = theme;
+            themePackages = [
+              # By default we would install all themes
+              (pkgs.adi1090x-plymouth-themes.override {
+                selected_themes = [ theme ];
+              })
+            ];
+          };
+
+    # Enable "Silent boot"
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "splash"
+      "boot.shell_on_fail"
+      "udev.log_priority=3"
+      "rd.systemd.show_status=auto"
+    ];
+    # Hide the OS choice for bootloaders.
+    # It's still possible to open the bootloader list by pressing any key
+    # It will just not appear on screen unless a key is pressed
+    loader.timeout = 0;
+
+    tmp.cleanOnBoot = true;
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -44,89 +103,20 @@
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_AU.UTF-8";
+  services.xserver.enable = true;
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
-  };
+  services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver = {
+  hardware.bluetooth = {
     enable = true;
-    excludePackages = [ pkgs.xterm ];
-
-    # Enable the GNOME Desktop Environment.
-    displayManager.gdm.enable = true;
-    desktopManager.gnome = {
-      enable = true;
+    powerOnBoot = true;
+    settings = {
+	    General = {
+		    Experimental = true;
+	    };
     };
   };
-
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-    gnome-usage
-    gnome-text-editor
-    baobab
-    evince
-  ]) ++ (with pkgs; [
-    cheese
-    gnome-music
-    epiphany
-    geary
-    gnome-characters
-    yelp
-    gnome-contacts
-    gnome-font-viewer
-    gnome-initial-setup
-    totem
-    gnome-weather
-    gnome-maps
-    gnome-system-monitor
-    simple-scan
-    gnome-logs
-    eog
-  ]);
-
-  programs.dconf.enable = true;
-
-  programs.adb.enable = true;
-
-  programs.kdeconnect = {
-    enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
-  };
-
-  environment.systemPackages = with pkgs; [
-    gnome-tweaks
-    gnomeExtensions.gsconnect
-    docker-compose
-    gnome-remote-desktop
-
-    android-tools
-    android-udev-rules
-  ];
-
-  services.gnome.gnome-remote-desktop.enable = true;
-
-  # services.fprintd = {
-  #   enable = true;
-
-  #   package = pkgs.fprintd-tod;
-  #   tod = {
-  #     enable = true;
-  #     driver = pkgs.libfprint-2-tod1-vfs0090;
-  #   };
-  # };
 
   # Configure keymap in X11
   services.xserver = {
@@ -150,18 +140,8 @@
     pulse.enable = true;
   };
 
-  programs.zsh.enable = true;
-
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "josh";
-
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
-
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "22.11";
 }

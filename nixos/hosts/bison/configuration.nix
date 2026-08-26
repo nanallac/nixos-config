@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, lib, config, pkgs, ... }:
 
 {
   imports = [
@@ -26,14 +26,19 @@
   systemd.user.services.steam = {
     enable = true;
     description = "Open steam in the background at boot";
-    requires = [ "networking.target" "multi-user.target" ];
+    wantedBy = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+
     serviceConfig = {
       ExecStart = "${pkgs.steam}/bin/steam -nochatui -nofriendsui -silent %U";
 
       Restart = "on-failure";
       RestartSec = "5s";
+      Type = "simple";
+      Environment = [ "DISPLAY=:0" ];
     };
   };
+
 
   networking = {
     hostName = "bison";
@@ -44,11 +49,6 @@
     };
   };
 
-  # Home Manager
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-  home-manager.users.josh = import ./../koala/home.nix;
-
   networking.networkmanager.enable = true;
   systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -56,21 +56,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 3;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_AU.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
-  };
 
   # Enable the X11 windowing system.
   services.xserver = {
@@ -86,11 +71,11 @@
     desktopManager.gnome.enable = true;
   };
 
-  services.xrdp = {
-    enable = true;
-    defaultWindowManager = "${pkgs.gnome-remote-desktop}/bin/gnome-remote-desktop";
-    openFirewall = true;
-  };
+
+  services.gnome.core-apps.enable = false;
+  services.gnome.core-developer-tools.enable = false;
+  services.gnome.games.enable = false;
+  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
 
 
   systemd.targets.sleep.enable = false;
@@ -98,39 +83,43 @@
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-    gnome-usage
-    gnome-text-editor
-    baobab
-    evince
-    cheese
-    gnome-music
-    epiphany
-    geary
-    gnome-characters
-    yelp
-    gnome-contacts
-    gnome-font-viewer
-    gnome-initial-setup
-    totem
-    gnome-weather
-    gnome-maps
-    gnome-system-monitor
-    simple-scan
-    gnome-logs
-    eog
-  ]);
+  programs.dconf = {
+    enable = true;
 
-  programs.dconf.enable = true;
+    profiles.user.databases = [
+      {
+        lockAll = false;
+        settings = {
 
-  programs.adb.enable = true;
+          "org/gnome/desktop/wm/preferences" = {
+            focus-new-windows = "smart";
+          };
+
+    "org/gnome/shell" = {
+      enabled-extensions =
+        [ "no-overview@fthx" ];
+    };
+
+          "org/gnome/shell/extensions/just-perfection" = {
+            startup-status = lib.gvariant.mkInt32 0;
+          };
+        };
+      }
+    ];
+
+  };
 
   environment.systemPackages = with pkgs; [
     gnome-tweaks
     gnome-session
     lact
+    wlr-protocols
+    wayland-protocols
+
+    gnomeExtensions.just-perfection
+
+    gnomeExtensions.no-overview
+
   ];
 
   systemd.packages = with pkgs; [ lact ];
