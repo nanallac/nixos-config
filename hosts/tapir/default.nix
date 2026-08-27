@@ -19,6 +19,11 @@
 
   programs.kdeconnect.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    kdePackages.kaccounts-providers
+    kdePackages.kaccounts-integration
+  ];
+
   # KDE Wallet unlock
   boot.initrd.systemd.enable = true;
   systemd.services.plasmalogin.serviceConfig.KeyringMode = "inherit";
