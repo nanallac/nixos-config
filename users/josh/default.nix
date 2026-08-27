@@ -29,11 +29,10 @@
       ];
     };
 
-  home-manager.users.josh = { pkgs, osConfig, lib, ... }: {
+  home-manager.users.josh = {
     home.stateVersion = "26.11";
     home.packages = with pkgs; [
       git
-    ] ++ lib.optionals osConfig.services.xserver.enable [
       thunderbird
       inkscape
       waypipe
