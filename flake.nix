@@ -21,10 +21,6 @@
       flake = false;
     };
 
-    nix-maid = {
-      url = "github:viperML/nix-maid";
-    };
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,43 +30,13 @@
       url = "github:nix-community/impermanence";
     };
 
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    dms = {
-      url = "github:AvengeMedia/DankMaterialShell/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    dms-plugin-registry = {
-      url = "github:AvengeMedia/dms-plugin-registry";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    tic-tac-toe = {
-      url = "github:nanallac/tic-tac-toe";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hearth = {
-      url = "git+file:/home/josh/dev/hearth";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, sops-nix, nix-maid, deploy-rs, tic-tac-toe, hearth, ... }@inputs:
+  outputs = { self, ... }@inputs:
     {
       nixosConfigurations =
         let

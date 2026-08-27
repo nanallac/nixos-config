@@ -15,7 +15,6 @@
     ./mqtt.nix
     ./nextcloud.nix
     ./music-assistant.nix
-    ./tic-tac-toe.nix
     # ./forgejo.nix
     ./scrutiny.nix
     ./go2rtc.nix
