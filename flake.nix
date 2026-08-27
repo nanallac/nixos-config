@@ -36,7 +36,7 @@
     };
   };
 
-  outputs = { self, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
     {
       nixosConfigurations =
         let
@@ -50,6 +50,8 @@
                 inputs.home-manager.nixosModules.home-manager
                 { home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
+                  # to mititgate file collisions - renames the existing file
+                  home-manager.backupFileExtension = "backup";
                   # for emacs config
                   home-manager.extraSpecialArgs = { inherit inputs; }; }
                 ./modules/core
