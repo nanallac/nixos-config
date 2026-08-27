@@ -1,6 +1,8 @@
 { inputs, config, pkgs, lib, ... }:
 
 {
+  imports = [ ];
+
   # Nix
   nix = {
     # channels not required for flake only.
@@ -35,8 +37,11 @@
     systemPackages = [
       pkgs.screen
       pkgs.htop
+      pkgs.tree
     ];
   };
+
+  programs.zsh.enable = true;
 
   # Locale & Time
   time.timeZone = "Australia/Perth";
@@ -78,7 +83,10 @@
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
+    # josh@koala
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJTkf9WjAcV3S2iHravn1okBw3YK81s/YjGr2kLyh6+j josh@callanan.contact"
+    # josh@tapir
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPirHdE6aQYvm4OdGhguk/+xTXfXBHppPz+qIiQ3SrgP josh@tapir"
   ];
 
   # fail2ban
@@ -95,6 +103,7 @@
 
   # Tailscale
   services.tailscale.enable = true;
+
   networking.firewall = {
     checkReversePath = "loose";
     allowedUDPPorts = [ config.services.tailscale.port ];
@@ -105,7 +114,6 @@
 
   # See if this helps prevent nixos-rebuild failures.
   systemd.services.tailscaled.after = [ "NetworkManager-wait-online.service" ];
-
 
   # SOPS
   sops.defaultSopsFile = ../../secrets/secrets.yaml;

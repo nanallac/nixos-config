@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    emacs-config = {
+      url = "github:nanallac/emacs.d?ref=main";
+      flake = false;
+    };
+
     nix-maid = {
       url = "github:viperML/nix-maid";
     };
@@ -58,6 +63,11 @@
       url = "git+file:/home/josh/dev/hearth";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, sops-nix, nix-maid, deploy-rs, tic-tac-toe, hearth, ... }@inputs:
@@ -71,6 +81,11 @@
               modules = [
                 inputs.disko.nixosModules.disko
                 inputs.sops-nix.nixosModules.sops
+                inputs.home-manager.nixosModules.home-manager
+                { home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  # for emacs config
+                  home-manager.extraSpecialArgs = { inherit inputs; }; }
                 ./modules/core
                 ./hosts/${hostname}
                 { networking.hostName = hostname; }
@@ -87,6 +102,7 @@
             "tapir" = mkHost {
               hostname = "tapir";
               system = "x86_64-linux";
+              users = [ "josh" ];
             };
 
             "bison" = mkHost {

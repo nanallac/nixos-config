@@ -6,47 +6,56 @@
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.home-manager
       inputs.nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-      inputs.dms-plugin-registry.nixosModules.default
+      # inputs.dms-plugin-registry.nixosModules.default
     ];
 
-  services.udisks2.enable = true;
+  # Display Manager & Desktop Manager
 
-  programs.niri.enable = config.services.xserver.enable;
-
-  services.displayManager.dms-greeter = {
-    enable = config.services.xserver.enable;
-    compositor.name = "niri";
-    package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
-    configHome = "/home/josh";
+  services = {
+    desktopManager.plasma6.enable = true;
+    displayManager.plasma-login-manager.enable = true;
   };
 
-  programs.dms-shell = {
-    enable = config.services.xserver.enable;
+  programs.kdeconnect.enable = true;
 
-    package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+  # services.udisks2.enable = true;
 
-    plugins = {
-      dankBatteryAlerts.enable = true;
-      # USBManager = {
-      #   enable = true;
-      #   src = inputs.dms-plugin-registry.packages.${pkgs.system}.USBManager;
-      # };
-    };
+  # programs.niri.enable = config.services.xserver.enable;
 
-    systemd = {
-      enable = true;             # Systemd service for auto-start
-      restartIfChanged = true;   # Auto-restart dms.service when dms-shell changes
-    };
+  # services.displayManager.dms-greeter = {
+  #   enable = config.services.xserver.enable;
+  #   compositor.name = "niri";
+  #   package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  #   quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+  #   configHome = "/home/josh";
+  # };
 
-    # Core features
-    enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-    enableVPN = true;                  # VPN management widget
-    enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
-    enableAudioWavelength = true;      # Audio visualizer (cava)
-    enableCalendarEvents = true;       # Calendar integration (khal)
-  };
+  # programs.dms-shell = {
+  #   enable = config.services.xserver.enable;
+
+  #   package = inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  #   quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+
+  #   plugins = {
+  #     dankBatteryAlerts.enable = true;
+  #     # USBManager = {
+  #     #   enable = true;
+  #     #   src = inputs.dms-plugin-registry.packages.${pkgs.system}.USBManager;
+  #     # };
+  #   };
+
+  #   systemd = {
+  #     enable = true;             # Systemd service for auto-start
+  #     restartIfChanged = true;   # Auto-restart dms.service when dms-shell changes
+  #   };
+
+  #   # Core features
+  #   enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+  #   enableVPN = true;                  # VPN management widget
+  #   enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+  #   enableAudioWavelength = true;      # Audio visualizer (cava)
+  #   enableCalendarEvents = true;       # Calendar integration (khal)
+  # };
 
   environment.systemPackages =
     (if config.services.xserver.enable then builtins.attrValues {

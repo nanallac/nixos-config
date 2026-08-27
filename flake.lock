@@ -171,6 +171,23 @@
         "type": "github"
       }
     },
+    "emacs-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787805725,
+        "narHash": "sha256-mN3VAq/Iyucb6IHs0WQzAL4a9whYJIhH6D13yh0p4ps=",
+        "owner": "nanallac",
+        "repo": "emacs.d",
+        "rev": "c22cf04d82273581e49d22c19ce0ae7156ae1c51",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nanallac",
+        "ref": "main",
+        "repo": "emacs.d",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -516,6 +533,7 @@
         "disko": "disko",
         "dms": "dms",
         "dms-plugin-registry": "dms-plugin-registry",
+        "emacs-config": "emacs-config",
         "hearth": "hearth",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
@@ -524,7 +542,8 @@
         "nixpkgs": "nixpkgs_3",
         "quickshell": "quickshell_2",
         "sops-nix": "sops-nix",
-        "tic-tac-toe": "tic-tac-toe"
+        "tic-tac-toe": "tic-tac-toe",
+        "zen-browser": "zen-browser"
       }
     },
     "sops-nix": {
@@ -598,6 +617,26 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787200418,
+        "narHash": "sha256-4d24Wa/CO8WsSEjKwzFwJXn+oxbI4Bm8xuMR77xJgYI=",
+        "owner": "youwen5",
+        "repo": "zen-browser-flake",
+        "rev": "20195bc99e82b02abe82bb81ac366ae81c67dc5a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "youwen5",
+        "repo": "zen-browser-flake",
         "type": "github"
       }
     }
