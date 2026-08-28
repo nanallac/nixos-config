@@ -64,11 +64,6 @@
 
   console.keyMap = "us";
 
-  # Networking
-  networking = {
-    domain = "nanall.ac";
-    firewall.enable = true;
-  };
 
   # Users
   users.mutableUsers = false;
@@ -101,17 +96,33 @@
     ];
   };
 
+  # Networking
+  networking = {
+    domain = "nanall.ac";
+  };
+
   # Tailscale
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
   };
 
+  # per NixOS Wiki https://wiki.nixos.org/wiki/Tailscale
+  networking.nftables.enable = true;
+
   networking.firewall = {
-    checkReversePath = "loose";
+    enable = true;
+    trustedInterfaces = [ config.services.tailscale.interfaceName ];
     allowedUDPPorts = [ config.services.tailscale.port ];
-    trustedInterfaces = [ "tailscale0" ];
+    checkReversePath = "loose";
   };
+
+  systemd.services.tailscaled.serviceConfig.Environment = [
+    "TS_DEBUG_FIREWALL_MODE=nftables"
+  ];
+
+  systemd.network.wait-online.enable = false;
+  boot.initrd.systemd.network.wait-online.enable = false;
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
