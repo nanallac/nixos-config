@@ -92,11 +92,11 @@
   # fail2ban
   services.fail2ban = {
     enable = true;
-    maxretry = 5;
-    bantime = "10m";
+    maxretry = 3;
+    bantime = "1h";
     ignoreIP = [
       "127.0.0.0/8"
-      "100.64.0.0/16"
+      "100.64.0.0/10"
       "192.168.0.0/16"
     ];
   };
