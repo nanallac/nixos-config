@@ -24,6 +24,11 @@
     kdePackages.kaccounts-integration
   ];
 
+  # fix online accounts nextcloud oauth flow
+  environment.variables.QML2_IMPORT_PATH = [
+    "${pkgs.kdePackages.qtwebengine}/lib/qt-6/qml"
+  ];
+
   # KDE Wallet unlock
   boot.initrd.systemd.enable = true;
   systemd.services.plasmalogin.serviceConfig.KeyringMode = "inherit";
