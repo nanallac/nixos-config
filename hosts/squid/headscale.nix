@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 let
   domain = "${config.networking.domain}";
@@ -12,6 +12,8 @@ in
       mode = "0440";
     };
   };
+
+  services.tailscale.useRoutingFeatures = lib.mkForce "both";
 
   services.headscale = {
     enable = true;

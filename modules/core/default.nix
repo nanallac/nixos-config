@@ -102,7 +102,10 @@
   };
 
   # Tailscale
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+  };
 
   networking.firewall = {
     checkReversePath = "loose";
