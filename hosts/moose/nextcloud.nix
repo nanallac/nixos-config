@@ -73,6 +73,24 @@
     };
   };
 
+  services.collabora-online = {
+    enable = true;
+    settings = {
+      server_name = "office.nanall.ac";
+      ssl = {
+        enable = false;
+        termination = true;
+      };
+      net.listen = "any";
+      storage.wopi.host = [ "cloud.nanall.ac" ];
+    };
+  };
+
+  fonts.packages = [
+    pkgs.liberation_ttf
+    pkgs.corefonts
+  ];
+
   services.imaginary = {
     enable = true;
     settings.return-size = true;
@@ -248,6 +266,14 @@
       "cloud.nanall.ac" = {
         forceSSL = true;
         useACMEHost = "nanall.ac";
+      };
+      "office.nanall.ac" = {
+        forceSSL = true;
+        useACMEHost = "nanall.ac";
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString config.services.collabora-online.port}";
+          proxyWebsockets = true;
+        };
       };
     };
   };
