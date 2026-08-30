@@ -19,10 +19,19 @@
 
   programs.kdeconnect.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    kdePackages.kaccounts-providers
-    kdePackages.kaccounts-integration
+  environment.systemPackages = with pkgs.kdePackages; [
+    # enabling online accounts for nextcloud with oauth sso
+    kaccounts-providers
+    kaccounts-integration
+    signond
+    signon-kwallet-extension
+    # so webdav works in dolphin
+    kio-extras
+    # for calendar/contacts
+    kdepim-runtime
   ];
+
+  services.dbus.packages = with pkgs.kdePackages; [ signond ];
 
   # fix online accounts nextcloud oauth flow
   environment.variables.QML2_IMPORT_PATH = [
