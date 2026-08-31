@@ -44,6 +44,7 @@
       calibre
       moonlight-qt
       emacs
+      libreoffice-qt
     ];
 
     home.file.".emacs.d" = {
