@@ -111,7 +111,7 @@
 
     certs."nanall.ac" = {
       domain = "nanall.ac";
-      extraDomainNames = [ "*.nanall.ac" "*.media.nanall.ac"];
+      extraDomainNames = [ "*.nanall.ac" ];
       dnsProvider = "porkbun";
       credentialFiles = {
         "PORKBUN_SECRET_API_KEY_FILE" = config.sops.secrets.porkbun_secret_api_key_file.path;
