@@ -6,6 +6,7 @@ keys:
   - &host_squid age15zf6wh9rmqwe6v95u9sy0azcec5t8ruqc93fds4r90rqtr649crqtg3238
   - &host_bison age1he5uuwlsxcr8kc890uzmu6sjpvj0v0n5u2plr27w9z4t80u45arqfqra8f
   - &host_koala age14lgf76qyt4m0w5e2304dl07y4x95xcmju74r689gmrjxs2l2jgtqywc8yf
+  - &josh_tapir age1ejmlnrnvsgrh6wddv2hm0mrce7vyhj2hrmqsnpy874f23q43yflsy2ah4v
 
 creation_rules:
   - path_regex: secrets/secrets.yaml$
@@ -18,3 +19,4 @@ creation_rules:
       - *host_squid
       - *host_bison
       - *host_koala
+      - *josh_tapir
