@@ -4,6 +4,17 @@
 2. edit .sops.yaml adding the result to keys: key and updating the creation_rules section.
 3. run `sops updatekeys ./secrets/secrets.yaml`
 
+## tailscale
+### server
+pre-auth keys: `headscale preauthkeys create -u 1 --reusable --expiration 720h --tags tag:server`
+#### on LAN
+`tailscale up --login-server=https://tailscale.nanall.ac --ssh --accept-dns=false --advertise-exit-node --advertise-tags=tag:server --reset --advertise-routes=192.168.1.0/24 --authkey=`
+#### on WAN
+`tailscale up --login-server=https://tailscale.nanall.ac --ssh --accept-dns=false --advertise-exit-node --advertise-tags=tag:server --reset --authkey=`
+### client
+`sudo tailscale up --login-server=https://tailscale.nanall.ac --ssh --accept-routes`
+if using an exit node add `--exit-node=moose --exit-node-allow-lan-access`
+
 # infrastructure
 
 ## machines
@@ -58,7 +69,12 @@
   - OS: NixOS
 
 ### IP Cameras
-
+- front doorbell
+  - IP: 192.168.40.
+- front porch
+  - IP: 192.168.40.
+- carport
+  - IP: 192.168.40.
 
 ### Josh Devices
 - Laptop

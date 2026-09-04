@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ./headscale.nix
+    ./adguard.nix
     ./kanidm.nix
     ./peertube.nix
   ];

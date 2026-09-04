@@ -104,7 +104,8 @@
   # Tailscale
   services.tailscale = {
     enable = true;
-    useRoutingFeatures = "client";
+    # mix of hosts inheriting this file - potentially split this in the future.
+    useRoutingFeatures = "both";
   };
 
   # per NixOS Wiki https://wiki.nixos.org/wiki/Tailscale
@@ -117,6 +118,9 @@
     checkReversePath = "loose";
   };
 
+  # prevent networking manager from clobbering tailscale state
+  networking.networkmanager.unmanaged = [ "interface-name:tailscale0" ];
+
   systemd.services.tailscaled.serviceConfig.Environment = [
     "TS_DEBUG_FIREWALL_MODE=nftables"
   ];
@@ -124,13 +128,13 @@
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
 
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-
-  # See if this helps prevent nixos-rebuild failures.
-  systemd.services.tailscaled.after = [ "NetworkManager-wait-online.service" ];
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv4.conf.tailscale0.rp_filter" = 0;
+    "net.ipv4.conf.all.rp_filter" = 0;
+  };
 
   # SOPS
   sops.defaultSopsFile = ../../secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-
 }
