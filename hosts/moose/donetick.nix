@@ -9,10 +9,12 @@
 
   virtualisation.containers = {
     enable = true;
-    registries.search = [
-      "docker.io"
-      "quay.io"
-    ];
+    registries.settings = {
+      registry = [
+        { location = "docker.io"; }
+        { location = "quay.io"; }
+      ];
+    };
   };
 
   sops.secrets = {
