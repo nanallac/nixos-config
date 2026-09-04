@@ -73,6 +73,13 @@
     };
   };
 
+  # memories hardware acceleration
+  users.users.nextcloud.extraGroups = [ "video" ];
+  systemd.services.phpfm-nextcloud.serviceConfig = {
+    DeviceAllow = "/dev/dri/renderD128 rw";
+    PrivateDevices = lib.mkForce false;
+  };
+
   services.collabora-online = {
     enable = true;
     settings = {
