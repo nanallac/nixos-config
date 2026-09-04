@@ -25,6 +25,7 @@
     ./pinchflat.nix
     ./peertube-runner.nix
     ./arr.nix
+    ./donetick.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
