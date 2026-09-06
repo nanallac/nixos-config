@@ -23,7 +23,6 @@
     ./ipcam-timelapse.nix
     ./ipcam.nix
     ./pinchflat.nix
-    ./peertube-runner.nix
     ./arr.nix
     ./donetick.nix
   ];

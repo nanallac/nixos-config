@@ -6,7 +6,6 @@
     ./headscale.nix
     ./adguard.nix
     ./kanidm.nix
-    ./peertube.nix
   ];
 
   # ACME certificates
