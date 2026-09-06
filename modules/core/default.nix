@@ -38,6 +38,7 @@
       pkgs.screen
       pkgs.htop
       pkgs.tree
+      pkgs.fuse # required for restic mount
     ];
   };
 
