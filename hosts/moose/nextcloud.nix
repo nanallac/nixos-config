@@ -217,6 +217,11 @@
     "d /keep/var/lib/nextcloud/preview 0750 nextcloud nextcloud - -"
   ];
 
+  # prevent nextcloud coming up if dataset not mounted
+  systemd.services.phpfpm-nextcloud.unitConfig.RequiresMountsFor = "/keep/var/lib/nextcloud/data";
+  systemd.services.nextcloud-setup.unitConfig.RequiresMountsFor = "/keep/var/lib/nextcloud/data";
+  systemd.services.nextcloud-cron.unitConfig.RequiresMountsFor = "/keep/var/lib/nextcloud/data";
+
   # Backups
 
   sops.secrets = {
