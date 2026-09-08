@@ -2,6 +2,7 @@
 
 {
   services.jellyfin.enable = true;
+  systemd.services.jellyfin.path = [ pkgs.yt-dlp ];
   users.users.jellyfin.extraGroups = [ "video" "render" "media"];
 
   services.nginx.virtualHosts."media.nanall.ac" = {
@@ -31,17 +32,6 @@
     "d /keep/var/lib/jellyfin 0700 jellyfin jellyfin -"
     "L /var/lib/jellyfin - - - - /keep/var/lib/jellyfin"
   ];
-
-  # Media shares for Jellyfin - temporary, reassess once NAS migrated to be local.
-  fileSystems."/mnt/media" = {
-    device = "192.168.1.100:/mnt/storage0/media";
-    fsType = "nfs";
-    options = [
-      "auto"
-      "noatime"
-      "x-systemd.automount"
-    ];
-  };
 
   # Backups
 
@@ -79,19 +69,4 @@
       "--keep-yearly 1"
     ];
   };
-
-  # TODO get this working!
-  # Restore backup if location is empty
-  # systemd.services = {
-  #   "restic-media-nanall-ac-restore" = {
-  #     serviceConfig.Type = "oneshot";
-  #     requires = [ "network.target" ];
-  #     before = [ "jellyfin.service" ];
-  #     script = ''
-  #       if [ -z "$(ls -A /keep/var/lib/jellyfin)" ]; then
-  #       ${config.pkgs.restic-media-nanall-ac} restore $(${config.pkgs.restic-media-nanall-ac} snapshots | grep /keep/var/lib/jellyfin | tail -n 1 | cut -d " " -f 1) --target /keep/var/lib/jellyfin
-  #       fi
-  #     '';
-  #   };
-  # };
 }

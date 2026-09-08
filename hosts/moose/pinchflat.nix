@@ -1,21 +1,20 @@
 { config, ... }:
 
 {
+  users.groups.media = {
+    gid = 973;
+    members = [ "pinchflat" ];
+  };
+
   services.pinchflat = {
     enable = true;
     openFirewall = true;
     selfhosted = true;
   };
 
-  systemd.services.pinchflat = {
-    after = [ "mnt-media.mount" ];
-    requires = [ "mnt-media.mount" ];
-  };
-
   systemd.tmpfiles.rules = [
-    "L+ /var/lib/pinchflat/media - - - - /mnt/media/media/youtube"
+    "L+ /var/lib/pinchflat/media - - - - /mnt/storage0/media/youtube"
   ];
-
 
   environment.persistence."/keep" = {
     directories = [

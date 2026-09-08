@@ -140,13 +140,29 @@
               compression = "lz4";
               recordsize = "1M";
               atime = "off";
-              relatime = "off";
+              logbias = "throughput";
+              xattr = "sa";
+              acltype = "posixacl";
+            };
+          };
+          "media/movies"       = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/movies"; };
+          "media/tv"           = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/tv"; };
+          "media/music"        = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/music"; };
+          "media/music_videos" = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/music_videos"; };
+          "media/youtube"      = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/youtube"; };
+          "media/action_cam"   = { type = "zfs_fs"; mountpoint = "/mnt/storage0/media/action_cam"; };
+          "downloads" = {
+            type = "zfs_fs";
+            mountpoint = "/mnt/storage0/downloads";
+            options = {
+              compression = "lz4";
+              recordsize = "1M";
+              atime = "off";
               logbias = "throughput";
             };
           };
           "nextcloud-data" = {
             type = "zfs_fs";
-            mountpoint = "/mnt/storage0/nextcloud-data";
             options = {
               compression = "lz4";
               atime = "off";

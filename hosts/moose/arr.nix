@@ -1,66 +1,59 @@
 { config, ...}:
 
 {
-  users.groups.media = {};
+  users.groups.media = {
+    gid = 973;
+    members = [ "pinchflat" ];
+  };
 
   services.sabnzbd = {
     enable = true;
     group = "media";
+    openFirewall = true;
     configFile = null;
     settings.misc = {
-      host = "127.0.0.1";
-      port = 9090;
+      host = "0.0.0.0";
+      port = 6767;
     };
   };
 
-  services.nginx.virtualHosts."newsreader.media.nanall.ac" = {
-    forceSSL = true;
-    useACMEHost = "nanall.ac";
-    locations = {
-      "/" = {
-        proxyPass =
-          let
-            host = config.services.sabnzbd.settings.misc.host;
-            port = config.services.sabnzbd.settings.misc.port;
-          in
-            "http://${host}:${toString port}";
-      };
-    };
-  };
-
-  services.prowlarr = {
+  services.seerr = {
     enable = true;
-    settings = {
-      Auth.Method = "External";
-    };
+    openFirewall = true;
   };
 
-  services.nginx.virtualHosts."indexers.media.nanall.ac" = {
-    forceSSL = true;
-    useACMEHost = "nanall.ac";
-    locations = {
-      "/" = {
-        proxyPass =
-          let
-            port = config.services.prowlarr.settings.server.port;
-          in
-        "http://localhost:${toString port}";
-      };
-    };
+  services.radarr = {
+    enable = true;
+    group = "media";
+    openFirewall = true;
+    settings.auth.method = "Forms";
+    settings.auth.required = "DisabledForLocalAddresses";
+    settings.update.mechanism = "external";
   };
+
+  services.sonarr = {
+    enable = true;
+    group = "media";
+    openFirewall = true;
+    settings.auth.method = "Forms";
+    settings.auth.required = "DisabledForLocalAddresses";
+    settings.update.mechanism = "external";
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /keep/var/lib/sabnzbd 2775 sabnzbd media - -"
+    "d /keep/var/lib/sonarr  2775 sonarr  media - -"
+    "d /keep/var/lib/radarr  2775 radarr  media - -"
+    "d /keep/var/lib/seerr   2775 seerr   seerr - -"
+  ];
 
   environment.persistence."/keep" = {
     hideMounts = true;
     directories = [
-      {
-        directory = "/var/lib/sabnzbd";
-        mode = "0700";
-      }
-      {
-        directory = "/var/lib/private/prowlarr";
-        mode = "0700";
-      }
+      { directory = "/var/lib/sabnzbd"; }
+      { directory = "/var/lib/sonarr";  }
+      { directory = "/var/lib/radarr";  }
+      { directory = "/var/lib/seerr";   }
     ];
   };
-
 }
