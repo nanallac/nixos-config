@@ -15,6 +15,10 @@ pre-auth keys: `headscale preauthkeys create -u 1 --reusable --expiration 720h -
 `sudo tailscale up --login-server=https://tailscale.nanall.ac --ssh --accept-routes`
 if using an exit node add `--exit-node=moose --exit-node-allow-lan-access`
 
+# backups
+using restic, backing up to backblaze b2.
+ensure b2 bucket `file lifecycle` setting is set to `Keep only the last version of the file` as we let restic manage the retention. reconsider if there is a risk of ransomware attacks?
+
 # infrastructure
 
 ## machines
