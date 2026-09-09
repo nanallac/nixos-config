@@ -106,6 +106,19 @@
         }).config.system.build.sdImage;
       };
 
+      devShells.x86_64-linux.default =
+        let
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        in
+          pkgs.mkShell {
+            packages = with pkgs; [
+              sops
+            ];
+            shellHook = ''
+              echo "Welcome to hermes-test development environment"
+            '';
+          };
+
       packages.x86_64-linux = import ./pkgs {
         inherit self inputs;
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
