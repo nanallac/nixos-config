@@ -18,7 +18,6 @@
     };
 
     config = {
-
       dbtype = "pgsql";
       dbuser = "nextcloud";
       dbhost = "/run/postgresql";
@@ -36,6 +35,7 @@
     phpExtraExtensions = all: [ all.pdlib all.bz2 all.redis all.smbclient ];
 
     settings = {
+      hide_login_form = true;
       default_phone_region = "AU";
       overwriteprotocol = "https";
       enabledPreviewProviders = [
