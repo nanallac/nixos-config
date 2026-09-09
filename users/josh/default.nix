@@ -7,9 +7,7 @@
     in {
       isNormalUser = true;
       description = "Josh Callanan";
-
       shell = pkgs.zsh;
-
       extraGroups = [
         "wheel"
       ] ++ ifGroupExists [
@@ -62,21 +60,28 @@
       '';
     };
 
+    programs.ghostty = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        font-size = 12;
+        font-family = "0xProto";
+        theme = "Snazzy";
+        quit-after-last-window-closed = false;
+      };
+      systemd.enable = true;
+    };
+
     programs.git = {
       enable = true;
-
-
       settings = {
         user = {
           name = "Josh Callanan";
           email = "josh@callanan.contact";
         };
-
         init.defaultBranch = "main";
-
         gpg.format = "openpgp";
         gpg.openpgp.program = lib.getExe pkgs.gnupg;
-
         url."https://github.com/".insteadOf = [ "gh:" "github:" ];
       };
     };
