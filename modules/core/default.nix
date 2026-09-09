@@ -39,6 +39,7 @@
       pkgs.htop
       pkgs.tree
       pkgs.fuse # required for restic mount
+      pkgs.ghostty.terminfo
     ];
   };
 
