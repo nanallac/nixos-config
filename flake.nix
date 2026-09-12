@@ -2,7 +2,7 @@
   description = "My NixOS infra.";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
