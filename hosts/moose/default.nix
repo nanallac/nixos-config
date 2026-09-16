@@ -20,8 +20,8 @@
     ./go2rtc.nix
     ./ntfy-sh.nix
     ./searx.nix
-    ./ipcam-timelapse.nix
-    ./ipcam.nix
+    # ./ipcam-timelapse.nix
+    # ./ipcam.nix
     ./pinchflat.nix
     ./arr.nix
     ./donetick.nix
