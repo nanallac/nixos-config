@@ -9,19 +9,14 @@
     inputs.home-manager.nixosModules.home-manager
     ./jellyfin.nix
     ./calibre-web.nix
-    ./freshrss.nix
-    ./vector.nix
     ./reverse-proxy.nix
     ./mqtt.nix
     ./nextcloud.nix
     ./music-assistant.nix
-    # ./forgejo.nix
     ./scrutiny.nix
     ./go2rtc.nix
     ./ntfy-sh.nix
     ./searx.nix
-    # ./ipcam-timelapse.nix
-    # ./ipcam.nix
     ./pinchflat.nix
     ./arr.nix
     ./donetick.nix
