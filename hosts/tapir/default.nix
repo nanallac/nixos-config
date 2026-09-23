@@ -10,6 +10,8 @@
     ../../modules/workstation
   ];
 
+  services.guix.enable = true;
+
   # Display Manager & Desktop Manager
 
   services = {
