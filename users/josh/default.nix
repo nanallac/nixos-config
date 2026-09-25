@@ -45,6 +45,11 @@
       libreoffice-qt
     ];
 
+    programs.firefox = {
+      enable = true;
+      package = pkgs.librewolf;
+    };
+
     home.file.".emacs.d" = {
       source = inputs.emacs-config;
       recursive = true;
