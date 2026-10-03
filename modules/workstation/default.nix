@@ -1,10 +1,6 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    ./zen.nix
-  ];
-
   programs.localsend = {
     enable = true;
     openFirewall = true;

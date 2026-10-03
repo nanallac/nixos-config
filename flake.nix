@@ -29,11 +29,6 @@
     impermanence = {
       url = "github:nix-community/impermanence";
     };
-
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
