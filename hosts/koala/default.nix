@@ -73,6 +73,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot = {
     plymouth =
       let theme = "lone"; in {
             # We only care about how the boot process looks on graphical systems
