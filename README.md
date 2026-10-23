@@ -90,9 +90,15 @@ ensure b2 bucket `file lifecycle` setting is set to `Keep only the last version 
   - Hostname: tapir
   - OS: Nixos
 - Mobile
+  - Device: Pixel 7 Pro
   - IP: 192.168.1.167
   - OS: GrapheneOS
   - Hostname: eagle
+- Mobile
+  - Device: Pixel 7 Pro
+  - IP:
+  - OS: GrapheneOS
+  - Hostname: galah
 
 ### Sydney Devices
 - Laptop
