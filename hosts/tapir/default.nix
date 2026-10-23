@@ -10,6 +10,20 @@
     ../../modules/workstation
   ];
 
+  # for Nistune
+  virtualisation = {
+    docker.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = true;  # only needed if you go Windows 11
+      };
+    };
+  };
+  programs.virt-manager.enable = true;
+  users.users.josh.extraGroups = [ "libvirtd" "docker" ];
+
   services.guix.enable = true;
 
   # Display Manager & Desktop Manager

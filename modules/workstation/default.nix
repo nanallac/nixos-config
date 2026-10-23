@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  environment.systemPackages = with pkgs; [
+    usbutils
+  ];
+
   programs.localsend = {
     enable = true;
     openFirewall = true;
