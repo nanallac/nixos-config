@@ -20,6 +20,7 @@
     ./pinchflat.nix
     ./arr.nix
     ./donetick.nix
+    ./mattermost.nix
   ];
 
   nixpkgs.config.allowUnfree = true;

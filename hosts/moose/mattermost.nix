@@ -1,0 +1,52 @@
+{ config, ... }:
+
+{
+  services.mattermost = {
+    enable = true;
+
+    siteUrl = "https://mattermost.nanall.ac";
+    siteName = "nanall";
+
+    host = "127.0.0.1";
+    port = 8065;
+
+    mutableConfig = true;
+
+    database = {
+      peerAuth = true;
+      name = "mattermost";
+      user = "mattermost";
+    };
+
+    socket.enable = true;
+  };
+
+  services.postgresql.authentication = "local mattermost mattermost peer";
+
+  services.nginx.virtualHosts."mattermost.nanall.ac" = {
+    forceSSL = true;
+    useACMEHost = "nanall.ac";
+    locations = {
+      "/" = {
+        proxyPass = "http://127.0.0.1:${toString config.services.mattermost.port}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          client_max_body_size 100M;
+          proxy_read_timeout 300s;
+          proxy_send_timeout 300s;
+        '';
+      };
+    };
+  };
+
+  environment.persistence."/keep" = {
+    directories = [
+      {
+        directory = "/var/lib/mattermost";
+        user = "mattermost";
+        group = "mattermost";
+        mode = "0750";
+      }
+    ];
+  };
+}
