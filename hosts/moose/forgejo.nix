@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
   services.forgejo = {
@@ -56,4 +56,14 @@
       }
     ];
   };
+
+  sops.secrets.forgejo-admin-password.owner = "forgejo";
+
+  systemd.services.forgejo.preStart = let
+    adminCmd = "${lib.getExe config.services.forgejo.package} admin user";
+    pwd = config.sops.secrets.forgejo-admin-password;
+    user = "admin_josh";
+    in ''
+       ${adminCmd} create --admin --email "root@localhost" --username ${user} --password "$(tr -d '\n' < ${pwd.path})" || true
+       '';
 }
