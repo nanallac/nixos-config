@@ -26,6 +26,12 @@
   systemd.tmpfiles.rules = [
     "d /keep/var/lib/mattermost/config 0750 mattermost mattermost -"
     "d /keep/var/lib/mattermost/logs 0750 mattermost mattermost -"
+    "d /keep/var/lib/mattermost/data 0750 mattermost mattermost -"
+    "L+ /keep/var/lib/mattermost/bin - - - - ${config.services.mattermost.package}/bin"
+    "L+ /keep/var/lib/mattermost/fonts - - - - ${config.services.mattermost.package}/fonts"
+    "L+ /keep/var/lib/mattermost/i18n - - - - ${config.services.mattermost.package}/i18n"
+    "L+ /keep/var/lib/mattermost/templates - - - - ${config.services.mattermost.package}/templates"
+    "L+ /keep/var/lib/mattermost/client - - - - ${config.services.mattermost.package}/client"
   ];
 
   systemd.services.mattermost.unitConfig.RequiresMountsFor = "/var/lib/mattermost";
