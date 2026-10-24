@@ -23,6 +23,13 @@
 
   services.postgresql.authentication = "local mattermost mattermost peer";
 
+  systemd.tmpfiles.rules = [
+    "d /keep/var/lib/mattermost/config 0750 mattermost mattermost -"
+    "d /keep/var/lib/mattermost/logs 0750 mattermost mattermost -"
+  ];
+
+  systemd.services.mattermost.unitConfig.RequiresMountsFor = "/var/lib/mattermost";
+
   services.nginx.virtualHosts."mattermost.nanall.ac" = {
     forceSSL = true;
     useACMEHost = "nanall.ac";
