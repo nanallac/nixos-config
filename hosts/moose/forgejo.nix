@@ -14,7 +14,12 @@
         HTTP_PORT = 3000;
       };
 
-      service.DISABLE_REGISTRATION = true;
+      service = {
+        DISABLE_REGISTRATION = false;
+        # ENABLE_INTERNAL_SIGNIN = false;
+        ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
+        SHOW_REGISTRATION_BUTTON = false;
+      };
     };
   };
 
