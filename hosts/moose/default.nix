@@ -21,6 +21,7 @@
     ./arr.nix
     ./donetick.nix
     ./mattermost.nix
+    ./forgejo.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
