@@ -16,6 +16,8 @@ let
     { enabled = true; domain = "office.nanall.ac"; answer = "100.64.0.9"; }
     { enabled = true; domain = "chat.nanall.ac"; answer = "100.64.0.1"; }
     { enabled = true; domain = "sunshine.nanall.ac"; answer = "100.64.0.1"; }
+    { enabled = true; domain = "mattermost.nanall.ac"; answer = "100.64.0.9"; }
+    { enabled = true; domain = "forge.nanall.ac"; answer = "100.64.0.9"; }
   ];
 in
 {
