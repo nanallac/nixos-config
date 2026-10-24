@@ -36,6 +36,12 @@
     ];
   };
 
+  systemd.tmpfiles.rules = [
+    "d /keep/var/lib/calibre-web/library 0700 calibre-web calibre-web -"
+  ];
+
+  systemd.services.calibre-web.unitConfig.RequiresMountsFor = "/var/lib/calibre-web";
+
   # Backups
 
   # environment.systemPackages = [ pkgs.restic ];

@@ -13,8 +13,15 @@
   };
 
   systemd.tmpfiles.rules = [
-    "L+ /var/lib/pinchflat/media - - - - /mnt/storage0/media/youtube"
+    "d /keep/var/lib/pinchflat/db 0770 ${config.services.pinchflat.user} ${config.services.pinchflat.group} -"
+    "d /keep/var/lib/pinchflat/logs 0770 ${config.services.pinchflat.user} ${config.services.pinchflat.group} -"
+    "d /keep/var/lib/pinchflat/metadata 0770 ${config.services.pinchflat.user} ${config.services.pinchflat.group} -"
+    "d /keep/var/lib/pinchflat/extras 0770 ${config.services.pinchflat.user} ${config.services.pinchflat.group} -"
+    "d /keep/var/lib/pinchflat/tmp 0770 ${config.services.pinchflat.user} ${config.services.pinchflat.group} -"
+    "L+ /keep/var/lib/pinchflat/media - - - - /mnt/storage0/media/youtube"
   ];
+
+  systemd.services.pinchflat.unitConfig.RequiresMountsFor = "/var/lib/pinchflat";
 
   environment.persistence."/keep" = {
     directories = [
