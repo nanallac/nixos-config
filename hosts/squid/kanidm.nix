@@ -8,7 +8,7 @@ in
 {
   users.users.kanidm.extraGroups = [ "acme" ];
   services.kanidm = {
-    package = pkgs.kanidm_1_11;
+    package = pkgs.kanidm_1_12;
     server.enable = true;
     server.settings = {
       domain = "${url}";

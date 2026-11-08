@@ -3,7 +3,7 @@
 {
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud34;
+    package = pkgs.nextcloud35;
     hostName = "cloud.nanall.ac";
 
     maxUploadSize = "16G";
@@ -23,9 +23,6 @@
       dbhost = "/run/postgresql";
       dbname = "nextcloud";
       dbpassFile = config.sops.secrets."nextcloud/database/dbpass".path;
-
-      adminpassFile = config.sops.secrets."nextcloud/database/adminpass".path;
-      adminuser = "admin";
     };
 
     phpOptions = {

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   users.groups.media = {
@@ -8,6 +8,7 @@
 
   services.pinchflat = {
     enable = true;
+    package = pkgs.pinchflat-ngx;
     openFirewall = true;
     selfhosted = true;
   };
