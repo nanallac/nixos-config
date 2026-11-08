@@ -52,5 +52,17 @@ in
         proxyPass = "http://192.168.30.202";
       };
     };
+    "ledger-uat.${domain}" = {
+      forceSSL = true;
+      useACMEHost = domain;
+      locations."/" = {
+        proxyPass = "http://192.168.1.121:8080";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_buffering off;
+          proxy_read_timeout 1h;
+        '';
+      };
+    };
   };
 }
